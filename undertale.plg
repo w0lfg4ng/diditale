@@ -1,0 +1,131 @@
+<html>
+<body>
+<pre>
+<h1>µVision3 Build Log</h1>
+<h2>Project:</h2>
+Z:\Rudah_Mariana\undertale-8051\undertale.uv2
+Project File Date:  10/30/2024
+
+<h2>Output:</h2>
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+linking...
+*** WARNING L7: MODULE NAME NOT UNIQUE
+    MODULE:  .\sll.LIB (?C_STARTUP)
+*** WARNING L7: MODULE NAME NOT UNIQUE
+    MODULE:  .\sll.LIB (?C_STARTUP)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _PAINTSCR
+    MODULE:  main.obj (MAIN)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _PRINTBMP
+    MODULE:  main.obj (MAIN)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _VKEYDOWN
+    MODULE:  main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _PAINTSCR
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 03D1H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _PRINTBMP
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 03DEH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _VKEYDOWN
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 03E3H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _VKEYDOWN
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 03ECH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _VKEYDOWN
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 03F5H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _VKEYDOWN
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 03FEH
+Program Size: data=11.0 xdata=0 code=1042
+creating hex file from "undertale"...
+"undertale" - 0 Error(s), 11 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=12.1 xdata=612 code=2284
+creating hex file from "undertale"...
+"undertale" - 0 Error(s), 0 Warning(s).
+"C:\VM\VM51.exe" Z:\Rudah_Mariana\undertale-8051\undertale.HEX
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=12.1 xdata=612 code=2295
+creating hex file from "undertale"...
+"undertale" - 0 Error(s), 0 Warning(s).
+"C:\VM\VM51.exe" Z:\Rudah_Mariana\undertale-8051\undertale.HEX
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=12.1 xdata=612 code=2321
+creating hex file from "undertale"...
+"undertale" - 0 Error(s), 0 Warning(s).
+"C:\VM\VM51.exe" Z:\Rudah_Mariana\undertale-8051\undertale.HEX
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=12.1 xdata=612 code=2321
+creating hex file from "undertale"...
+"undertale" - 0 Error(s), 0 Warning(s).
+"C:\VM\VM51.exe" Z:\Rudah_Mariana\undertale-8051\undertale.HEX
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=12.1 xdata=612 code=2321
+creating hex file from "undertale"...
+"undertale" - 0 Error(s), 0 Warning(s).
+"C:\VM\VM51.exe" Z:\Rudah_Mariana\undertale-8051\undertale.HEX
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=12.1 xdata=612 code=2321
+creating hex file from "undertale"...
+"undertale" - 0 Error(s), 0 Warning(s).
+"C:\VM\VM51.exe" Z:\Rudah_Mariana\undertale-8051\undertale.HEX
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=12.1 xdata=612 code=2334
+creating hex file from "undertale"...
+"undertale" - 0 Error(s), 0 Warning(s).
+"C:\VM\VM51.exe" Z:\Rudah_Mariana\undertale-8051\undertale.HEX
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=12.1 xdata=612 code=2333
+creating hex file from "undertale"...
+"undertale" - 0 Error(s), 0 Warning(s).
+"C:\VM\VM51.exe" Z:\Rudah_Mariana\undertale-8051\undertale.HEX
+"C:\VM\VM51.exe" Z:\Rudah_Mariana\undertale-8051\undertale.HEX
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=12.1 xdata=612 code=2335
+creating hex file from "undertale"...
+"undertale" - 0 Error(s), 0 Warning(s).
+"C:\VM\VM51.exe" Z:\Rudah_Mariana\undertale-8051\undertale.HEX
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=12.1 xdata=612 code=2333
+creating hex file from "undertale"...
+"undertale" - 0 Error(s), 0 Warning(s).
+"C:\VM\VM51.exe" Z:\Rudah_Mariana\undertale-8051\undertale.HEX
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=12.1 xdata=612 code=2333
+creating hex file from "undertale"...
+"undertale" - 0 Error(s), 0 Warning(s).
+"C:\VM\VM51.exe" Z:\Rudah_Mariana\undertale-8051\undertale.HEX

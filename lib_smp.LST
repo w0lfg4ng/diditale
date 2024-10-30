@@ -1,0 +1,444 @@
+A51 MACRO ASSEMBLER  LIB_SMP                                                              10/24/2024 14:19:18 PAGE     1
+
+
+MACRO ASSEMBLER A51 V7.10
+OBJECT MODULE PLACED IN lib_smp.OBJ
+ASSEMBLER INVOKED BY: C:\Keil\C51\BIN\A51.EXE lib_smp.asm SET(SMALL) DEBUG EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ; bilioteca de rotinas SMP
+                       2     
+                       3     public  COD0,COD1,COD2,COD3,COD4,COD5,COD6,COD7
+                       4     public    dig0,dig1,dig2,dig3,dig4
+                       5     public  init_lib,muxdisplay,_convert,_bintobcd,_delaycm 
+                       6     
+                       7     ; Arquivo com as funções Arduíno 
+                       8     
+                       9     public _digitalWrite,_digitalRead,_delay,_pinMode
+                      10     
+                      11     
+  00A0                12     DSP1      equ       P2.0      
+  00A1                13     DSP2      equ       P2.1
+  00A2                14     DSP3      equ       P2.2      
+  00A3                15     DSP4      equ       P2.3
+  00A4                16     DSP0      equ       P2.4      
+  00A5                17     DSP5      equ       P2.5
+  00A6                18     DSP6      equ       P2.6      
+  00A7                19     DSP7      equ       P2.7
+                      20     
+                      21     dados   segment data
+                      22     prog    segment   code
+                      23     xdados  segment xdata
+                      24     ;flags     segment   bit
+                      25     
+                      26      ;         rseg      flags
+                      27     
+                      28     
+----                  29             rseg    dados
+0000                  30     DIGITO: ds      1
+0001                  31     PDIGITO:        ds      1
+0002                  32     COD1:   ds      1
+0003                  33     COD2:   ds      1
+0004                  34     COD3:   ds      1
+0005                  35     COD4:   ds      1
+0006                  36     COD0:   ds      1
+0007                  37     COD5:   ds      1
+0008                  38     COD6:   ds      1
+0009                  39     COD7:   ds      1
+                      40     
+000A                  41     dig0:   ds      1
+000B                  42     dig1:   ds      1
+000C                  43     dig2:   ds      1
+000D                  44     dig3:   ds      1
+000E                  45     dig4:   ds      1
+                      46     
+                      47     
+----                  48             rseg    xdados
+0000                  49     dummy:  ds      1
+                      50     
+----                  51             rseg    prog
+0000 C2A4             52     init_lib:       clr     DSP0
+0002 7500FE   F       53               mov       DIGITO,#0FEh
+0005 750000   F       54               mov       PDIGITO,#0
+0008 22               55             ret
+                      56     ;=====================================================================
+                      57     
+0009                  58     muxdisplay:
+A51 MACRO ASSEMBLER  LIB_SMP                                                              10/24/2024 14:19:18 PAGE     2
+
+0009 C0D0             59               push      psw
+000B C0E0             60               push      acc
+000D C000             61               push      00h
+000F 75A0FF           62               mov   P2,#0ffh           ;16 ciclos 8us
+0012 7400     F       63             mov     a,#COD1
+0014 2500     F       64             add     a,PDIGITO
+0016 F8               65             MOV     R0,a
+0017 8680             66             mov     P0,@r0
+0019 E500     F       67             mov     a,DIGITO
+001B F5A0             68             mov     P2,a
+001D 0500     F       69             inc     PDIGITO
+001F 530007   F       70             anl     PDIGITO,#07h
+0022 23               71             rl      a
+0023 F500     F       72             mov     DIGITO,a
+0025 D000             73               pop       00h
+0027 D0E0             74               pop       acc
+0029 D0D0             75               pop       psw
+002B 22               76             ret
+                      77     
+                      78     ;---------------------delay---------------------------------
+                      79     ; Nc =  16*R5:R6:R7 + 6; 
+                      80     ;
+002C EF               81     _delaycm: mov       a,r7      ;1
+002D 1F               82               dec       r7        ;1
+002E 7007             83               jnz       fimd      ;2
+0030 EE               84               mov       a,r6      ;1
+0031 1E               85               dec       R6        ;1
+0032 7007             86               jnz       fimd2     ;2
+0034 1D               87               dec       R5        ;1
+0035 8007             88               sjmp      seg1      ;2 = 11
+0037 00               89     fimd:     nop                 ;1
+0038 00               90               nop                 ;1
+0039 00               91               nop                 ;1
+003A 00               92               nop                 ;1
+003B 00               93     fimd2:    nop                 ;1
+003C 00               94               nop                 ;1
+003D 00               95               nop                 ;1
+003E EF               96     seg1:     mov       a,r7      ;1
+003F 4E               97               orl       a,r6      ;1
+0040 4D               98               orl       a,r5      ;1
+0041 70E9             99               jnz       _delaycm  ;2
+0043 22              100               ret                 ;2
+                     101     ;=====================================================================
+                     102     
+                     103     
+0044 EF              104     _convert:       mov       a,r7
+0045 900000   F      105               mov   dptr,#tabela7seg
+0048 93              106             movc    a,@a+dptr  ; pega na tabela o equivalente 7 segmentos
+0049 FF              107               mov       r7,a
+004A 22              108             ret
+                     109     ;=====================================================================
+                     110     
+                     111     ;
+                     112     ;  num = r6:r7
+                     113     ;
+004B                 114     _bintobcd:
+004B EF              115               mov       a,r7
+004C 7B10            116             mov     r3,#16
+004E C3              117             clr     c
+004F 750000   F      118             mov     dig0,#0
+0052 750000   F      119             mov     dig1,#0
+0055 750000   F      120             mov     dig2,#0
+0058 750000   F      121             mov     dig3,#0
+005B 750000   F      122             mov     dig4,#0
+                     123     
+005E 33              124     bintodecx:rlc   a
+A51 MACRO ASSEMBLER  LIB_SMP                                                              10/24/2024 14:19:18 PAGE     3
+
+005F CE              125             xch     a,r6
+0060 33              126             rlc     a
+0061 CE              127             xch     a,r6
+                     128     
+0062 C0E0            129             push    acc
+                     130     
+0064 E500     F      131             mov     a,dig0
+0066 35E0            132             addc    a,acc
+0068 B40A00          133             cjne    a,#10,dif9
+006B 4003            134     dif9:   jc      fim0
+006D C3              135             clr     c
+006E 940A            136             subb    a,#10
+0070 B3              137     fim0:   cpl     c
+0071 F500     F      138             mov     dig0,a
+                     139     
+0073 E500     F      140             mov     a,dig1
+0075 35E0            141             addc    a,acc
+0077 B40A00          142             cjne    a,#10,dif91
+007A 4003            143     dif91:  jc      fim1
+007C C3              144             clr     c
+007D 940A            145             subb    a,#10
+007F B3              146     fim1:   cpl     c
+0080 F500     F      147             mov     dig1,a
+                     148     
+0082 E500     F      149             mov     a,dig2
+0084 35E0            150             addc    a,acc
+0086 B40A00          151             cjne    a,#10,dif92
+0089 4003            152     dif92:  jc      fim2
+008B C3              153             clr     c
+008C 940A            154             subb    a,#10
+008E B3              155     fim2:   cpl     c
+008F F500     F      156             mov     dig2,a
+                     157     
+0091 E500     F      158             mov     a,dig3
+0093 35E0            159             addc    a,acc
+0095 B40A00          160             cjne    a,#10,dif93
+0098 4003            161     dif93:  jc      fim3
+009A C3              162             clr     c
+009B 940A            163             subb    a,#10
+009D B3              164     fim3:   cpl     c
+009E F500     F      165             mov     dig3,a
+                     166     
+00A0 E500     F      167             mov     a,dig4
+00A2 35E0            168             addc    a,acc
+00A4 B40A00          169             cjne    a,#10,dif94
+00A7 4003            170     dif94:  jc      fim4
+00A9 C3              171             clr     c
+00AA 940A            172             subb    a,#10
+00AC B3              173     fim4:   cpl     c
+00AD F500     F      174             mov     dig4,a
+                     175     
+00AF D0E0            176             pop     acc
+00B1 DBAB            177             djnz    r3,bintodecx
+00B3 22              178             ret
+                     179     ;=====================================================================
+                     180     
+                     181     
+00B4                 182     tabela7seg:
+00B4 C0              183             db      0C0h    ;0 - 1100$0000
+00B5 F9              184             db      0F9h      ;1 - 1111$1001
+00B6 A4              185             db      0A4h      ;2 - 1010$0100
+00B7 B0              186             db        0B0h  ;3 - 1011$0000
+00B8 99              187             db        099h      ;4 - 1001$1001
+00B9 92              188             db      092h      ;5 - 1001$0010
+00BA 82              189             db      082h      ;6 - 1000$0010
+00BB D8              190             db      0d8h      ;7 - 1101$1000
+A51 MACRO ASSEMBLER  LIB_SMP                                                              10/24/2024 14:19:18 PAGE     4
+
+00BC 80              191             db      080h      ;8 - 1000$0000
+00BD 90              192             db      090h      ;9 - 1001$0000
+                     193     
+                     194     
+                     195     
+                     196     ;r7 numero do pino, r5 nivel 1 ou 0
+00BE                 197     _digitalWrite:
+00BE EF              198               mov       a,r7
+00BF 75F008          199               mov       b,#8
+00C2 84              200               div       ab  ; a= porta, b = bit(0,7)
+00C3 FF              201               mov       r7,a
+00C4 BD0004          202               cjne      r5,#0,_setbit1
+00C7 ADF0            203               mov       r5,b
+00C9 801E            204               jmp       _clrbit
+00CB                 205     _setbit1:
+00CB ADF0            206               mov       r5,b
+00CD 8000            207               jmp       _setbit
+                     208                               
+00CF 900000   F      209     _setbit:  mov       dptr,#tabela2
+00D2 ED              210               mov       a,r5
+00D3 93              211               movc      a,@a+dptr      
+00D4 BF0002          212               cjne      r7,#0,neh0
+00D7 4280            213               orl       P0,a
+00D9                 214     neh0:
+00D9 BF0102          215               cjne      r7,#1,neh1
+00DC 4290            216               orl       P1,a
+00DE                 217     neh1:
+00DE BF0202          218               cjne      r7,#2,neh2
+00E1 42A0            219               orl       P2,a
+00E3                 220     neh2:
+00E3 BF0302          221               cjne      r7,#3,neh3
+00E6 42B0            222               orl       P3,a
+                     223     
+00E8                 224     neh3:
+00E8 22              225               ret ; sub-rotinas retornam no ret
+                     226     
+                     227     
+00E9 900000   F      228     _clrbit:  mov       dptr,#tabela2
+00EC ED              229               mov       a,r5
+00ED 93              230               movc      a,@a+dptr 
+00EE F4              231               cpl       a     
+00EF BF0002          232               cjne      r7,#0,neh0a
+00F2 5280            233               anl       P0,a
+00F4                 234     neh0a:
+00F4 BF0102          235               cjne      r7,#1,neh1a
+00F7 5290            236               anl       P1,a
+00F9                 237     neh1a:
+00F9 BF0202          238               cjne      r7,#2,neh2a
+00FC 52A0            239               anl       P2,a
+00FE                 240     neh2a:
+00FE BF0302          241               cjne      r7,#3,neh3a
+0101 52B0            242               anl       P3,a
+                     243     
+0103                 244     neh3a:
+0103 22              245               ret ; sub-rotinas retornam no ret
+                     246     
+                     247     ;r7 recebe o numero da porta
+0104                 248     _digitalRead:
+0104 EF              249               mov       a,r7
+0105 75F008          250               mov       b,#8
+0108 84              251               div       ab  ; a= porta, b = bit(0,7)
+0109 FF              252               mov       r7,a
+010A ADF0            253               mov       r5,b
+010C 900000   F      254               mov       dptr,#tabela2
+010F ED              255               mov       a,r5
+0110 93              256               movc      a,@a+dptr 
+A51 MACRO ASSEMBLER  LIB_SMP                                                              10/24/2024 14:19:18 PAGE     5
+
+0111 FD              257               mov       r5,a     
+0112 BF0005          258               cjne      r7,#0,neh0x
+0115 E580            259               mov       a,P0
+0117 5D              260               anl       a,r5
+0118 8018            261               jmp       finalx
+011A                 262     neh0x:
+011A BF0105          263               cjne      r7,#1,neh1x
+011D E590            264               mov       a,P1
+011F 5D              265               anl       a,r5
+0120 8010            266               jmp       finalx
+0122                 267     neh1x:
+0122 BF0205          268               cjne      r7,#2,neh2x
+0125 E5A0            269               mov       a,P2
+0127 5D              270               anl       a,r5
+0128 8008            271               jmp       finalx
+012A                 272     neh2x:
+012A BF030D          273               cjne      r7,#3,neh3x
+012D E5B0            274               mov       a,P3
+012F 5D              275               anl       a,r5
+0130 8000            276               jmp       finalx
+                     277     
+0132                 278     finalx:
+0132 6003            279               jz        jogazerox
+0134 7F01            280               mov       r7,#1
+0136 22              281               ret
+                     282     
+0137                 283     jogazerox:
+0137 7F00            284               mov       r7,#0
+0139 22              285               ret
+                     286       
+013A                 287     neh3x:
+013A 22              288               ret ; sub-rotinas retornam no ret
+                     289               
+                     290     
+                     291     ;Parâmetro é em milisegundos r6:r7, clock 24mhZ
+                     292     ;Cm = 0.5us
+                     293     ;1ms = 2000Cm 
+013B                 294     _delay:
+013B 78FA            295               mov       r0,#250   ;PARA 1ms
+013D 00              296     loop:     nop ;1
+013E 00              297               nop ;1      
+013F 00              298               nop ;1
+0140 00              299               nop ;1
+0141 00              300               nop ;1
+0142 00              301               nop ;1             ;6*0,5 = 3*250 = 750us 
+0143 D8F8            302               djnz      r0,loop  ;2 * 250 = 500 => 500 * 0,5 = 250us ;250us + 750us = 1ms  
+0145 1F              303               dec       r7
+0146 EF              304               mov       a,r7
+0147 B4FF01          305               cjne      a,#0ffh,saltar
+014A 1E              306               dec       r6
+014B                 307     saltar:
+014B EE              308               mov       a,r6
+014C 2F              309               add       a,r7
+014D 70EC            310               jnz       _delay
+014F 22              311               ret
+                     312     
+                     313     ;Existe apenas por compatibilidade
+0150                 314     _pinMode:
+                     315               
+0150 22              316               ret
+                     317     
+                     318     
+0151                 319     tabela2:   
+0151 01              320               db        01h ; bit 0 = 1
+0152 02              321               db        02h ; bit 1 = 1
+0153 04              322               db        04h ; bit 2 = 2
+A51 MACRO ASSEMBLER  LIB_SMP                                                              10/24/2024 14:19:18 PAGE     6
+
+0154 08              323               db        08h ; bit 3 = 1
+0155 10              324               db        10h ; bit 4 = 1
+0156 20              325               db        20h ; bit 5 = 1
+0157 40              326               db        40h ; bit 6 = 1
+0158 80              327               db        80h ; bit 7 = 1
+                     328     
+                     329               
+                     330             end
+                             
+A51 MACRO ASSEMBLER  LIB_SMP                                                              10/24/2024 14:19:18 PAGE     7
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+ACC. . . . . . . .  D ADDR   00E0H   A   
+B. . . . . . . . .  D ADDR   00F0H   A   
+BINTODECX. . . . .  C ADDR   005EH   R   SEG=PROG
+COD0 . . . . . . .  D ADDR   0006H   R   SEG=DADOS
+COD1 . . . . . . .  D ADDR   0002H   R   SEG=DADOS
+COD2 . . . . . . .  D ADDR   0003H   R   SEG=DADOS
+COD3 . . . . . . .  D ADDR   0004H   R   SEG=DADOS
+COD4 . . . . . . .  D ADDR   0005H   R   SEG=DADOS
+COD5 . . . . . . .  D ADDR   0007H   R   SEG=DADOS
+COD6 . . . . . . .  D ADDR   0008H   R   SEG=DADOS
+COD7 . . . . . . .  D ADDR   0009H   R   SEG=DADOS
+DADOS. . . . . . .  D SEG    000FH       REL=UNIT
+DIF9 . . . . . . .  C ADDR   006BH   R   SEG=PROG
+DIF91. . . . . . .  C ADDR   007AH   R   SEG=PROG
+DIF92. . . . . . .  C ADDR   0089H   R   SEG=PROG
+DIF93. . . . . . .  C ADDR   0098H   R   SEG=PROG
+DIF94. . . . . . .  C ADDR   00A7H   R   SEG=PROG
+DIG0 . . . . . . .  D ADDR   000AH   R   SEG=DADOS
+DIG1 . . . . . . .  D ADDR   000BH   R   SEG=DADOS
+DIG2 . . . . . . .  D ADDR   000CH   R   SEG=DADOS
+DIG3 . . . . . . .  D ADDR   000DH   R   SEG=DADOS
+DIG4 . . . . . . .  D ADDR   000EH   R   SEG=DADOS
+DIGITO . . . . . .  D ADDR   0000H   R   SEG=DADOS
+DSP0 . . . . . . .  B ADDR   00A0H.4 A   
+DSP1 . . . . . . .  B ADDR   00A0H.0 A   
+DSP2 . . . . . . .  B ADDR   00A0H.1 A   
+DSP3 . . . . . . .  B ADDR   00A0H.2 A   
+DSP4 . . . . . . .  B ADDR   00A0H.3 A   
+DSP5 . . . . . . .  B ADDR   00A0H.5 A   
+DSP6 . . . . . . .  B ADDR   00A0H.6 A   
+DSP7 . . . . . . .  B ADDR   00A0H.7 A   
+DUMMY. . . . . . .  X ADDR   0000H   R   SEG=XDADOS
+FIM0 . . . . . . .  C ADDR   0070H   R   SEG=PROG
+FIM1 . . . . . . .  C ADDR   007FH   R   SEG=PROG
+FIM2 . . . . . . .  C ADDR   008EH   R   SEG=PROG
+FIM3 . . . . . . .  C ADDR   009DH   R   SEG=PROG
+FIM4 . . . . . . .  C ADDR   00ACH   R   SEG=PROG
+FIMD . . . . . . .  C ADDR   0037H   R   SEG=PROG
+FIMD2. . . . . . .  C ADDR   003BH   R   SEG=PROG
+FINALX . . . . . .  C ADDR   0132H   R   SEG=PROG
+INIT_LIB . . . . .  C ADDR   0000H   R   SEG=PROG
+JOGAZEROX. . . . .  C ADDR   0137H   R   SEG=PROG
+LOOP . . . . . . .  C ADDR   013DH   R   SEG=PROG
+MUXDISPLAY . . . .  C ADDR   0009H   R   SEG=PROG
+NEH0 . . . . . . .  C ADDR   00D9H   R   SEG=PROG
+NEH0A. . . . . . .  C ADDR   00F4H   R   SEG=PROG
+NEH0X. . . . . . .  C ADDR   011AH   R   SEG=PROG
+NEH1 . . . . . . .  C ADDR   00DEH   R   SEG=PROG
+NEH1A. . . . . . .  C ADDR   00F9H   R   SEG=PROG
+NEH1X. . . . . . .  C ADDR   0122H   R   SEG=PROG
+NEH2 . . . . . . .  C ADDR   00E3H   R   SEG=PROG
+NEH2A. . . . . . .  C ADDR   00FEH   R   SEG=PROG
+NEH2X. . . . . . .  C ADDR   012AH   R   SEG=PROG
+NEH3 . . . . . . .  C ADDR   00E8H   R   SEG=PROG
+NEH3A. . . . . . .  C ADDR   0103H   R   SEG=PROG
+NEH3X. . . . . . .  C ADDR   013AH   R   SEG=PROG
+P0 . . . . . . . .  D ADDR   0080H   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+P3 . . . . . . . .  D ADDR   00B0H   A   
+A51 MACRO ASSEMBLER  LIB_SMP                                                              10/24/2024 14:19:18 PAGE     8
+
+PDIGITO. . . . . .  D ADDR   0001H   R   SEG=DADOS
+PROG . . . . . . .  C SEG    0159H       REL=UNIT
+PSW. . . . . . . .  D ADDR   00D0H   A   
+SALTAR . . . . . .  C ADDR   014BH   R   SEG=PROG
+SEG1 . . . . . . .  C ADDR   003EH   R   SEG=PROG
+TABELA2. . . . . .  C ADDR   0151H   R   SEG=PROG
+TABELA7SEG . . . .  C ADDR   00B4H   R   SEG=PROG
+XDADOS . . . . . .  X SEG    0001H       REL=UNIT
+_BINTOBCD. . . . .  C ADDR   004BH   R   SEG=PROG
+_CLRBIT. . . . . .  C ADDR   00E9H   R   SEG=PROG
+_CONVERT . . . . .  C ADDR   0044H   R   SEG=PROG
+_DELAY . . . . . .  C ADDR   013BH   R   SEG=PROG
+_DELAYCM . . . . .  C ADDR   002CH   R   SEG=PROG
+_DIGITALREAD . . .  C ADDR   0104H   R   SEG=PROG
+_DIGITALWRITE. . .  C ADDR   00BEH   R   SEG=PROG
+_PINMODE . . . . .  C ADDR   0150H   R   SEG=PROG
+_SETBIT. . . . . .  C ADDR   00CFH   R   SEG=PROG
+_SETBIT1 . . . . .  C ADDR   00CBH   R   SEG=PROG
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

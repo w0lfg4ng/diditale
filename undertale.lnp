@@ -1,0 +1,4 @@
+"main.obj",
+".\sll.LIB" 
+TO "undertale" 
+RAMSIZE(256) 
