@@ -1,0 +1,254 @@
+C51 COMPILER V7.20   ESCALONAMENTO_TASK                                                    11/13/2024 12:14:54 PAGE 1   
+
+
+C51 COMPILER V7.20, COMPILATION OF MODULE ESCALONAMENTO_TASK
+OBJECT MODULE PLACED IN escalonamento_task.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE escalonamento_task.c BROWSE DEBUG OBJECTEXTEND TABS(10)
+
+line level    source
+
+   1          /*SOLOPLAY */
+   2          #include <reg52.h>
+   3          
+   4          #include "flecha_bmp.c"
+   5          #include "..\lib\sll.h"
+   6          
+   7          
+   8          int x1,x2,x3,y1,y2,y3 = 0;
+   9          char estado1,estado2,estado3;
+  10          
+  11          void task1(void){
+  12   1                
+  13   1          printbmp(x1,y1, flecha);
+  14   1          switch(estado1){
+  15   2                                    
+  16   2                  case 3:
+  17   2                    x1--;
+  18   2                    y1--;
+  19   2                    if(x1<=0){
+  20   3                      estado1 = 2;
+  21   3                    }
+  22   2                    if(y1 <=0){
+  23   3                      if(estado1 == 2){
+  24   4                                estado1 = 0;
+  25   4                            } 
+  26   3                              else{
+  27   4                                estado1 = 1;
+  28   4                              }
+  29   3                    }
+  30   2                    break;
+  31   2                                    
+  32   2                    case 2:
+  33   2                      x1++;
+  34   2                      y1--;
+  35   2                            if(x1>=(240-21)){
+  36   3                              estado1 = 3;
+  37   3                            }
+  38   2                                    if(y1 <=0){
+  39   3                                      if(estado1 ==3){
+  40   4                                                estado1 = 1;
+  41   4                                              }
+  42   3                                      else{
+  43   4                                        estado1 = 0;
+  44   4                                      }
+  45   3                    }
+  46   2                    break;
+  47   2                                                        
+  48   2                    case 0:
+  49   2                              x1++;
+  50   2                              y1++;
+  51   2                                    if(x1>=(240-21)){
+  52   3                                      estado1 = 1;
+  53   3                                    }
+  54   2                                    if(y1 > (128-21)){
+  55   3                                      if(estado1 == 1){
+C51 COMPILER V7.20   ESCALONAMENTO_TASK                                                    11/13/2024 12:14:54 PAGE 2   
+
+  56   4                                                estado1 = 3;
+  57   4                                              }
+  58   3                                    
+  59   3                                      else{
+  60   4                                        estado1 = 2;
+  61   4                                      }
+  62   3                                    }
+  63   2                                    break;
+  64   2                                    
+  65   2                            case 1:
+  66   2                              x1--;
+  67   2                              y1++;
+  68   2                                    if(x1 <= 0){
+  69   3                                      estado1 = 0;
+  70   3                                    }
+  71   2                                    if(y1 >= 128-21){
+  72   3                                      if(estado1 == 0){
+  73   4                                                estado1 = 2;
+  74   4                                              }
+  75   3                                      else{
+  76   4                                        estado1 = 3;
+  77   4                                      }
+  78   3                                    }
+  79   2                                    
+  80   2          }
+  81   1      }
+  82          
+  83          void task2 (void){
+  84   1                
+  85   1                printbmp(x2,y2, flecha);
+  86   1          switch(estado2){
+  87   2                                    
+  88   2                  case 3:
+  89   2                    x2--;
+  90   2                    y2--;
+  91   2                    if(x2<=0){
+  92   3                      estado2 = 2;
+  93   3                    }
+  94   2                    if(y2 <=0){
+  95   3                      if(estado2 == 2){
+  96   4                                estado2 = 0;
+  97   4                            } 
+  98   3                              else{
+  99   4                                estado2 = 1;
+ 100   4                              }
+ 101   3                    }
+ 102   2                    break;
+ 103   2                                    
+ 104   2                    case 2:
+ 105   2                      x2++;
+ 106   2                      y2--;
+ 107   2                            if(x2>=(240-21)){
+ 108   3                              estado2 = 3;
+ 109   3                            }
+ 110   2                                    if(y2 <=0){
+ 111   3                                      if(estado2 ==3){
+ 112   4                                                estado2 = 1;
+ 113   4                                              }
+ 114   3                                      else{
+ 115   4                                        estado2 = 0;
+ 116   4                                      }
+ 117   3                    }
+C51 COMPILER V7.20   ESCALONAMENTO_TASK                                                    11/13/2024 12:14:54 PAGE 3   
+
+ 118   2                    break;
+ 119   2                                                        
+ 120   2                    case 0:
+ 121   2                              x2++;
+ 122   2                              y2++;
+ 123   2                                    if(x2>=(240-21)){
+ 124   3                                      estado2 = 1;
+ 125   3                                    }
+ 126   2                                    if(y2 > (128-21)){
+ 127   3                                      if(estado2 == 1){
+ 128   4                                                estado2 = 3;
+ 129   4                                              }
+ 130   3                                    
+ 131   3                                      else{
+ 132   4                                        estado2 = 2;
+ 133   4                                      }
+ 134   3                                    }
+ 135   2                                    break;
+ 136   2                                    
+ 137   2                            case 1:
+ 138   2                              x2--;
+ 139   2                              y2++;
+ 140   2                                    if(x2 <= 0){
+ 141   3                                      estado2 = 0;
+ 142   3                                    }
+ 143   2                                    if(y2 >= 128-21){
+ 144   3                                      if(estado2 == 0){
+ 145   4                                                estado2 = 2;
+ 146   4                                              }
+ 147   3                                      else{
+ 148   4                                        estado2 = 3;
+ 149   4                                      }
+ 150   3                                    }
+ 151   2                                    
+ 152   2          }
+ 153   1      }
+ 154          
+ 155          void task3(void){ 
+ 156   1                
+ 157   1                printbmp(x3,y3, flecha);
+ 158   1          switch(estado3){
+ 159   2                                    
+ 160   2                  case 3:
+ 161   2                    x3--;
+ 162   2                    y3--;
+ 163   2                    if(x3<=0){
+ 164   3                      estado3 = 2;
+ 165   3                    }
+ 166   2                    if(y3 <=0){
+ 167   3                      if(estado3 == 2){
+ 168   4                                estado3 = 0;
+ 169   4                            } 
+ 170   3                              else{
+ 171   4                                estado3 = 1;
+ 172   4                              }
+ 173   3                    }
+ 174   2                    break;
+ 175   2                                    
+ 176   2                    case 2:
+ 177   2                      x3++;
+ 178   2                      y3--;
+ 179   2                            if(x3>=(240-21)){
+C51 COMPILER V7.20   ESCALONAMENTO_TASK                                                    11/13/2024 12:14:54 PAGE 4   
+
+ 180   3                              estado3 = 3;
+ 181   3                            }
+ 182   2                                    if(y3 <=0){
+ 183   3                                      if(estado3 ==3){
+ 184   4                                                estado3 = 1;
+ 185   4                                              }
+ 186   3                                      else{
+ 187   4                                        estado3 = 0;
+ 188   4                                      }
+ 189   3                    }
+ 190   2                    break;
+ 191   2                                                        
+ 192   2                    case 0:
+ 193   2                              x3++;
+ 194   2                              y3++;
+ 195   2                                    if(x3>=(240-21)){
+ 196   3                                      estado3 = 1;
+ 197   3                                    }
+ 198   2                                    if(y3 > (128-21)){
+ 199   3                                      if(estado3 == 1){
+ 200   4                                                estado3 = 3;
+ 201   4                                              }
+ 202   3                                    
+ 203   3                                      else{
+ 204   4                                        estado3 = 2;
+ 205   4                                      }
+ 206   3                                    }
+ 207   2                                    break;
+ 208   2                                    
+ 209   2                            case 1:
+ 210   2                              x3--;
+ 211   2                              y3++;
+ 212   2                                    if(x3 <= 0){
+ 213   3                                      estado3 = 0;
+ 214   3                                    }
+ 215   2                                    if(y3 >= 128-21){
+ 216   3                                      if(estado3 == 0){
+ 217   4                                                estado3 = 2;
+ 218   4                                              }
+ 219   3                                      else{
+ 220   4                                        estado3 = 3;
+ 221   4                                      }
+ 222   3                                    }
+ 223   2                                    
+ 224   2          }
+ 225   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    783    ----
+   CONSTANT SIZE    =   3030    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     15    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

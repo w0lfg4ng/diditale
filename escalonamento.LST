@@ -1,0 +1,92 @@
+A51 MACRO ASSEMBLER  ESCALONAMENTO                                                        11/13/2024 12:14:53 PAGE     1
+
+
+MACRO ASSEMBLER A51 V7.10
+OBJECT MODULE PLACED IN escalonamento.OBJ
+ASSEMBLER INVOKED BY: C:\Keil\C51\BIN\A51.EXE escalonamento.asm SET(SMALL) DEBUG EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ;UNDERTALE DA TURMINHA DO DIDI XD
+                       2     ;escalonador
+                       3     
+                       4     extrn code(task1, task2, task3, task0)
+                       5     public estado
+                       6       
+----                   7                 dseg at 8
+0008                   8     estado: ds  1 
+                       9             
+----                  10                 cseg at 000bh   ;timer 0
+                      11     
+000B 758CB2           12                 mov  th0,#(256-78) 
+000E E508             13                 mov  a, estado
+0010 B4000E           14                 cjne a,#0, salto1
+0013 120000   F       15                 call task0
+0016 120000   F       16                 call task1
+0019 120000   F       17                 call task2
+001C 120000   F       18                 call task3
+001F 8043             19                 jmp  fim
+                      20       
+0021 B40108           21     salto1:  cjne a,#1,salto2
+0024 120000   F       22              call task0
+0027 120000   F       23              call task1
+002A 8038             24              jmp  fim
+                      25                             
+002C B4020B           26     salto2:  cjne a,#2,salto3
+002F 120000   F       27               call task0
+0032 120000   F       28               call task1
+0035 120000   F       29             call task2
+0038 802A             30             jmp  fim
+                      31     
+003A B4030B           32     salto3:  cjne a,#3,salto4
+003D 120000   F       33              call task0
+0040 120000   F       34              call task1
+0043 120000   F       35              call task3
+0046 801C             36              jmp  fim
+                      37     
+0048 B4040B           38     salto4:  cjne a,#4,salto5
+004B 120000   F       39              call task0
+004E 120000   F       40              call task1
+0051 120000   F       41              call task2
+0054 800E             42              jmp  fim
+                      43     
+0056 B4050B           44     salto5:  cjne a,#5,salto6
+0059 120000   F       45              call task0
+005C 120000   F       46              call task1
+005F 750800           47              mov  estado,#0
+0062 8004             48              jmp  fim2
+                      49     
+0064                  50     salto6:
+0064 0508             51     fim:    inc  estado
+0066 8000             52             jmp  fim2
+0068 32               53     fim2:   reti
+                      54     
+                      55     end
+A51 MACRO ASSEMBLER  ESCALONAMENTO                                                        11/13/2024 12:14:53 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+ESTADO . . . . . .  D ADDR   0008H   A   
+FIM. . . . . . . .  C ADDR   0064H   A   
+FIM2 . . . . . . .  C ADDR   0068H   A   
+SALTO1 . . . . . .  C ADDR   0021H   A   
+SALTO2 . . . . . .  C ADDR   002CH   A   
+SALTO3 . . . . . .  C ADDR   003AH   A   
+SALTO4 . . . . . .  C ADDR   0048H   A   
+SALTO5 . . . . . .  C ADDR   0056H   A   
+SALTO6 . . . . . .  C ADDR   0064H   A   
+TASK0. . . . . . .  C ADDR   -----       EXT
+TASK1. . . . . . .  C ADDR   -----       EXT
+TASK2. . . . . . .  C ADDR   -----       EXT
+TASK3. . . . . . .  C ADDR   -----       EXT
+TH0. . . . . . . .  D ADDR   008CH   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

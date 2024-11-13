@@ -1,69 +1,110 @@
-C51 COMPILER V7.20   MAIN                                                                  10/30/2024 12:07:16 PAGE 1   
+C51 COMPILER V7.20   MAIN                                                                  11/13/2024 12:14:50 PAGE 1   
 
 
 C51 COMPILER V7.20, COMPILATION OF MODULE MAIN
 OBJECT MODULE PLACED IN main.OBJ
-COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND TABS(10)
 
 line level    source
 
    1           /*DIDITALE XD*/
    2           /*TURMINHA DO DIDI XD*/
-   3           
+   3          
    4          #include <reg52.h>
    5          #include "diditale_bmp.c"
    6          #include "..\lib\sll.h"
    7          
-   8           void main(void){
-   9   1         BYTE x = 100;
-  10   1         BYTE y = 45;
-  11   1      
-  12   1         paintscr(0, 0, 0);
-  13   1         while(1){
-  14   2               
-  15   2           
-  16   2           printbmp(x,y,diditale);
-  17   2               if(vkeydown(VK_RIGHT)){
-  18   3                   x++;
-  19   3                       if (x >= 240-21){
-  20   4                         x = 240-21;
-  21   4                       }
-  22   3               }
-  23   2               if(vkeydown(VK_LEFT)){
-  24   3                   x--;
-  25   3                       if(x <= 1){
-  26   4                         x = 1;
-  27   4                 }
-  28   3               }
-  29   2               if(vkeydown(VK_UP)){
-  30   3                   y--;
-  31   3                       if(y <= 1){
-  32   4                         y = 1;
-  33   4                 }
-  34   3      
-  35   3                 
-  36   3               }
-  37   2               if(vkeydown(VK_DOWN)){
-  38   3                 y++;
-  39   3                 
-  40   3                 if(y >=128-21){
-  41   4                   y = 128-21;
-  42   4                 }    
-  43   3               }
-  44   2               delay(1);
-  45   2         }
-  46   1       }
+   8          COLOR corShield = {0, 0, 255};
+   9          COLOR eraseShield = {0,0,0};
+  10           void task0(void){
+  11   1         unsigned char shieldx,shieldy,erasex,erasey;
+  12   1         BYTE x = 100;
+  13   1         BYTE y = 45;
+  14   1      
+  15   1         paintscr(0, 0, 0);
+  16   1         for (shieldx = 100; shieldx <=140; shieldx++){
+  17   2            plotxy(shieldx,44,&corShield);
+  18   2          }
+  19   1           printbmp(110,54,diditale);
+  20   1      
+  21   1         while(1){
+  22   2                
+  23   2           if(vkeydown(VK_RIGHT)){
+  24   3             for (shieldy = 44; shieldy <=84; shieldy++){
+  25   4               plotxy(141,shieldy,&corShield); //direita          
+  26   4             }
+  27   3             for (erasex = 100; erasex <=140; erasex++){
+  28   4            plotxy(erasex,44,&eraseShield);          //apaga cima
+  29   4             }
+  30   3            for (erasex = 100; erasex <=140; erasex++){
+  31   4               plotxy(erasex,84,&eraseShield);  //apaga baixo
+  32   4             }
+  33   3             for (erasey = 44; erasey <=84; erasey++){
+  34   4               plotxy(100,erasey,&eraseShield);  //apaga esquerda
+  35   4             }
+  36   3             delay(30);
+  37   3           }
+  38   2      
+  39   2           if(vkeydown(VK_LEFT)){
+  40   3             for (shieldy = 44; shieldy <=84; shieldy++){
+  41   4               plotxy(100,shieldy,&corShield);  //esquerda
+  42   4             }
+  43   3             for (erasey = 44; erasey <=84; erasey++){
+  44   4               plotxy(141,erasey,&eraseShield);  //apaga direita
+  45   4             }
+  46   3             for (erasex = 100; erasex <=140; erasex++){
+  47   4            plotxy(erasex,44,&eraseShield);    // apaga cima     
+  48   4             }
+  49   3             for (erasex = 100; erasex <=140; erasex++){
+  50   4               plotxy(erasex,84,&eraseShield);  //apaga baixo
+  51   4             } 
+  52   3             delay(30);
+  53   3           }
+  54   2           if(vkeydown(VK_UP)){
+  55   3             for (shieldx = 100; shieldx <=140; shieldx++){
+C51 COMPILER V7.20   MAIN                                                                  11/13/2024 12:14:50 PAGE 2   
+
+  56   4               plotxy(shieldx,44,&corShield);  //cima
+  57   4             }
+  58   3             for (erasey = 44; erasey <=84; erasey++){
+  59   4               plotxy(141,erasey,&eraseShield);     //apaga direita
+  60   4             }
+  61   3             for (erasex = 100; erasex <=140; erasex++){
+  62   4               plotxy(erasex,84,&eraseShield);  //apaga baixo
+  63   4             }   
+  64   3             for (erasey = 44; erasey <=84; erasey++){
+  65   4               plotxy(100,erasey,&eraseShield);  //apaga esquerda
+  66   4             }
+  67   3             delay(30);    
+  68   3             }
+  69   2           if(vkeydown(VK_DOWN)){
+  70   3             for (shieldx = 100; shieldx <=140; shieldx++){
+  71   4               plotxy(shieldx,84,&corShield);  //baixo
+  72   4               }
+  73   3             for (erasey = 44; erasey <=84; erasey++){
+  74   4               plotxy(141,erasey,&eraseShield); // apaga direita
+  75   4             }
+  76   3             for (erasex = 100; erasex <=140; erasex++){
+  77   4               plotxy(erasex,44,&eraseShield);    // apaga cima     
+  78   4             }
+  79   3             for (erasey = 44; erasey <=84; erasey++){
+  80   4               plotxy(100,erasey,&eraseShield);  //apaga esquerda
+  81   4             }
+  82   3             delay(30); 
+  83   3         }
+  84   2         delay(1);
+  85   2           }
+  86   1      
+  87   1       }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    113    ----
+   CODE SIZE        =    537    ----
    CONSTANT SIZE    =    963    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----       2
+   DATA SIZE        =      6       6
    IDATA SIZE       =   ----    ----
-C51 COMPILER V7.20   MAIN                                                                  10/30/2024 12:07:16 PAGE 2   
-
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
 

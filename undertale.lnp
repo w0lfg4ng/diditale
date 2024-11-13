@@ -1,4 +1,7 @@
 "main.obj",
-".\sll.LIB" 
+".\sll.LIB",
+"estados.obj",
+"escalonamento.obj",
+"escalonamento_task.obj" 
 TO "undertale" 
 RAMSIZE(256) 

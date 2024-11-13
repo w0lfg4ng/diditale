@@ -1,0 +1,37 @@
+C51 COMPILER V7.20   ESTADOS                                                               11/13/2024 12:14:52 PAGE 1   
+
+
+C51 COMPILER V7.20, COMPILATION OF MODULE ESTADOS
+OBJECT MODULE PLACED IN estados.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE estados.c BROWSE DEBUG OBJECTEXTEND TABS(10)
+
+line level    source
+
+   1          //DECLARAÇÃO DO ESTADO
+   2          //TURMINHA DO DIDI XD
+   3          #include <reg52.h>
+   4          
+   5          
+   6          extern char estado;
+   7           void main(void){
+   8   1         TMOD = 0x01;
+   9   1         TH0=(256-78);
+  10   1         IE = 0x82;
+  11   1         TR0 = 1;
+  12   1         estado = 0;
+  13   1         while(1);
+  14   1       }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     16    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

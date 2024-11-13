@@ -1,41 +1,87 @@
  /*DIDITALE XD*/
  /*TURMINHA DO DIDI XD*/
-#include "flecha_bmp.c"
+
 #include <reg52.h>
 #include "diditale_bmp.c"
-#include "C:\Users\EduMaker\Downloads\diditale-main\diditale-main\sll.h"
+#include "..\lib\sll.h"
 
 COLOR corShield = {0, 0, 255};
 COLOR eraseShield = {0,0,0};
- void main(void){
-   unsigned char shieldx,shieldy;
+ void task0(void){
+   unsigned char shieldx,shieldy,erasex,erasey;
    BYTE x = 100;
    BYTE y = 45;
 
    paintscr(0, 0, 0);
-   while(1){
-	 
-    for (shieldx = 100; shieldx <=140; shieldx++){
+   for (shieldx = 100; shieldx <=140; shieldx++){
       plotxy(shieldx,44,&corShield);
     }
      printbmp(110,54,diditale);
-     if(vkeydown(VK_RIGHT)){
-			 for (shieldy = 44; shieldy <=84; shieldy++){
-				 plotxy(141,shieldy,&corShield);	
-			}
-			 plotxy(shieldx,44,&eraseShield);
-     }
-     if(vkeydown(VK_LEFT)){
 
+   while(1){
+	
+     if(vkeydown(VK_RIGHT)){
+       for (shieldy = 44; shieldy <=84; shieldy++){
+         plotxy(141,shieldy,&corShield); //direita	
+       }
+       for (erasex = 100; erasex <=140; erasex++){
+      plotxy(erasex,44,&eraseShield);          //apaga cima
+       }
+      for (erasex = 100; erasex <=140; erasex++){
+         plotxy(erasex,84,&eraseShield);  //apaga baixo
+       }
+       for (erasey = 44; erasey <=84; erasey++){
+         plotxy(100,erasey,&eraseShield);  //apaga esquerda
+       }
+       delay(30);
+     }
+
+     if(vkeydown(VK_LEFT)){
+       for (shieldy = 44; shieldy <=84; shieldy++){
+         plotxy(100,shieldy,&corShield);  //esquerda
+       }
+       for (erasey = 44; erasey <=84; erasey++){
+         plotxy(141,erasey,&eraseShield);  //apaga direita
+       }
+       for (erasex = 100; erasex <=140; erasex++){
+      plotxy(erasex,44,&eraseShield);    // apaga cima     
+       }
+       for (erasex = 100; erasex <=140; erasex++){
+         plotxy(erasex,84,&eraseShield);  //apaga baixo
+       } 
+       delay(30);
      }
      if(vkeydown(VK_UP)){
        for (shieldx = 100; shieldx <=140; shieldx++){
-         plotxy(shieldx,44,&corShield);
-			 }
-     }
+         plotxy(shieldx,44,&corShield);  //cima
+       }
+       for (erasey = 44; erasey <=84; erasey++){
+         plotxy(141,erasey,&eraseShield);     //apaga direita
+       }
+       for (erasex = 100; erasex <=140; erasex++){
+         plotxy(erasex,84,&eraseShield);  //apaga baixo
+       }   
+       for (erasey = 44; erasey <=84; erasey++){
+         plotxy(100,erasey,&eraseShield);  //apaga esquerda
+       }
+       delay(30);    
+       }
      if(vkeydown(VK_DOWN)){
-
-     }
-     delay(1);
+       for (shieldx = 100; shieldx <=140; shieldx++){
+         plotxy(shieldx,84,&corShield);  //baixo
+         }
+       for (erasey = 44; erasey <=84; erasey++){
+         plotxy(141,erasey,&eraseShield); // apaga direita
+       }
+       for (erasex = 100; erasex <=140; erasex++){
+         plotxy(erasex,44,&eraseShield);    // apaga cima     
+       }
+       for (erasey = 44; erasey <=84; erasey++){
+         plotxy(100,erasey,&eraseShield);  //apaga esquerda
+       }
+       delay(30); 
    }
+   delay(1);
+     }
+
  }

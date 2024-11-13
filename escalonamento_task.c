@@ -1,14 +1,16 @@
 /*SOLOPLAY */
 #include <reg52.h>
-#include "diditale_bmp.c"
+
+#include "flecha_bmp.c"
 #include "..\lib\sll.h"
+
 
 int x1,x2,x3,y1,y2,y3;
 char estado1,estado2,estado3;
 
 void task1(void){
 	
-    printbmp(x1,y1, rostobom);
+    printbmp(x1,y1, flecha);
     switch(estado1){
 			
 	  case 3:
@@ -80,7 +82,7 @@ void task1(void){
 
 void task2 (void){
 	
-	printbmp(x2,y2, rostomau);
+	printbmp(x2,y2, flecha);
     switch(estado2){
 			
 	  case 3:
@@ -152,7 +154,7 @@ void task2 (void){
 
 void task3(void){ 
 	
-	printbmp(x3,y3, rostoneutro);
+	printbmp(x3,y3, flecha);
     switch(estado3){
 			
 	  case 3:
