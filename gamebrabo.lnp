@@ -1,0 +1,6 @@
+"escalonamento.obj",
+"escalonamento_task.obj",
+"main.obj",
+"..\lib\sll.LIB" 
+TO "gamebrabo" 
+RAMSIZE(256) 
