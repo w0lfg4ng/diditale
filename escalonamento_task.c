@@ -1,7 +1,7 @@
  /*DIDITALE XD*/
  /*TURMINHA DO DIDI XD*/
 #include <reg52.h>
-#include "GAMEOVER_bmp.c"
+#include "DEAD_bmp.c"
 #include "SHURIKEN_bmp.c"
 #include "ESCUDOHORIZONTAL_bmp.c"
 #include "ESCUDOVERTICAL_bmp.c"
@@ -9,7 +9,7 @@
 #include "apagaVertical_bmp.c"
 #include "CENARIO_bmp.c"
 #include "DIDI_bmp.c"
-#include "..\lib\sll.h"
+#include "C:\Users\IFMaker\Downloads\diditale-main\sll.h"
 
 extern int shieldUp, shieldDown, shieldLeft, shieldRight;
 bit rodando = 1;
@@ -19,7 +19,7 @@ int x1 = 0;
 int y1 = 0;
 char estado1,estado2,estado3;
 int stop = 0;
-PLAN p0,p1,p2,p3;
+PLAN p0,p1,p2,p3,p4;
 
 int shieldUp, shieldDown, shieldLeft, shieldRight;
 extern char estado;
@@ -27,10 +27,8 @@ extern int stop;
  
 
 void main(void){
-   printbmp(110,54,DIDI);
-   printbmp(100,44,ESCUDOHORIZONTAL);
-
-   p0.backgroudplan = BACKPLN1; 
+   p0.backgroudplan = BACKPLN1;
+    
    p0.shapeplan = BACKPLN2;
    p0.tcolor = RGB(0, 0, 0);
    p0.ptr = &p1;
@@ -39,9 +37,17 @@ void main(void){
    p1.tcolor = RGB(0, 0, 0);
    p1.ptr = &p2;
 
-   p1.shapeplan = BACKPLN4;
-   p1.tcolor = RGB(0, 0, 0);
-   p1.ptr = null;
+   p2.shapeplan = BACKPLN4;
+   p2.tcolor = RGB(0, 0, 0);
+   p2.ptr = &p3;
+
+   p3.shapeplan = BACKPLN5;
+   p3.tcolor = RGB(0, 0, 0);
+   p3.ptr = &p4;
+
+   p4.shapeplan = BACKPLN6;
+   p4.tcolor = RGB(0, 0, 0);
+   p4.ptr = null;
 
    GRPLNSEL = BACKPLN1;
    printbmp(0,0,CENARIO);
@@ -59,17 +65,18 @@ void main(void){
 }
 
 int finish(){
-	printbmp(0,0,GAMEOVER);
 	stop = 1;
 	return stop;
 }
 
+
+
 void task0(void){
+  
   GRPLNSEL = BACKPLN2;
-  PaintPlan(RGB(0,0,0));
-
+  //PaintPlan(RGB(0,0,0));
      if(stop == 0){
-
+	 printbmp(110,54,DIDI);
        if(vkeydown(VK_RIGHT)){
 	     printbmp(110,54,DIDI);
          printbmp(140,44,ESCUDOVERTICAL); //direita
@@ -124,17 +131,13 @@ void task0(void){
 	     shieldLeft = 0;
 	     shieldRight = 0;
          delay(10); 
-        }
-     delay(1);	 
+        }	 
        }
-       JoinPlans(&p0);
      }
 
  void task1(void){
-
  GRPLNSEL = BACKPLN3;
  PaintPlan(RGB(0,0,0));
-
 
  if(stop == 0){
     printbmp(x1,y1, SHURIKEN);
@@ -152,7 +155,7 @@ void task0(void){
 		  finish();
 		}  // direita OK
 		
-	    if(y1 <=0 || shieldDown == 1 && y1 == 90 && x1 >= 100-31 && x1 <= 140){
+	    if(y1 <=0 || shieldDown == 1 && y1 == 90 && x1 >= 90-31 && x1 <= 150){
 	      if(estado1 == 2){
 		      estado1 = 0;
 		  }
@@ -212,7 +215,7 @@ void task0(void){
 		  case 1:
 		    x1--;
 		    y1++;
-			if(x1 <= 0 || shieldRight == 1 && x1 <= 140+31 && 44-31 <= y1 && y1 <= 84){
+			if(x1 <= 0 || shieldRight == 1 && x1 <= 140 && 44-31 <= y1 && y1 <= 84){
 			  estado1 = 0;
 			}
 		    else if (shieldRight == 0 && x1 == 130 && 54 <= y1 && y1 <= 74){
@@ -256,7 +259,7 @@ void task2(void){
 		  finish();
 		}  // direita OK
 		
-	    if(y2 <=0 || shieldDown == 1 && y2 == 85 && x2 >= 100-31 && x2 <= 140){
+	    if(y2 <=0 || shieldDown == 1 && y2 == 85 && x2 >= 90-31 && x2 <= 150){
 	      if(estado2 == 2){
 		      estado2 = 0;
 		  }
@@ -316,7 +319,7 @@ void task2(void){
 		  case 1:
 		    x2--;
 		    y2++;
-			if(x2 <= 0 || shieldRight == 1 && x2 == 132 && 44-31 <= y2 && y2 <= 84){
+			if(x2 <= 0 || shieldRight == 1 && x1 <= 140 && 44-31 <= y1 && y1 <= 84){
 			  estado2 = 0;
 			}
 		    else if (shieldRight == 0 && x2 == 130 && 44-31 <= y2 && y2 <= 84){
@@ -339,3 +342,10 @@ void task2(void){
   }
 }
 
+void gameover(void){
+  if(stop == 1){
+    GRPLNSEL = BACKPLN2;
+	PaintPlan(RGB(0,0,0));
+	printbmp(0,0,DEAD);
+  }
+}

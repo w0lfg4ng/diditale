@@ -1,9 +1,9 @@
-C51 COMPILER V7.20   MAIN                                                                  11/21/2024 10:29:50 PAGE 1   
+C51 COMPILER V7.20   MAIN                                                                  11/21/2024 15:40:49 PAGE 1   
 
 
 C51 COMPILER V7.20, COMPILATION OF MODULE MAIN
 OBJECT MODULE PLACED IN main.OBJ
-COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND TABS(10)
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
 
 line level    source
 
