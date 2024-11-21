@@ -1,16 +1,16 @@
-C51 COMPILER V7.20   ESCALONAMENTO_TASK                                                    11/21/2024 10:29:49 PAGE 1   
+C51 COMPILER V7.20   ESCALONAMENTO_TASK                                                    11/21/2024 15:40:49 PAGE 1   
 
 
 C51 COMPILER V7.20, COMPILATION OF MODULE ESCALONAMENTO_TASK
 OBJECT MODULE PLACED IN escalonamento_task.OBJ
-COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE escalonamento_task.c BROWSE DEBUG OBJECTEXTEND TABS(10)
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE escalonamento_task.c BROWSE DEBUG OBJECTEXTEND
 
 line level    source
 
    1           /*DIDITALE XD*/
    2           /*TURMINHA DO DIDI XD*/
    3          #include <reg52.h>
-   4          #include "GAMEOVER_bmp.c"
+   4          #include "DEAD_bmp.c"
    5          #include "SHURIKEN_bmp.c"
    6          #include "ESCUDOHORIZONTAL_bmp.c"
    7          #include "ESCUDOVERTICAL_bmp.c"
@@ -18,7 +18,7 @@ line level    source
    9          #include "apagaVertical_bmp.c"
   10          #include "CENARIO_bmp.c"
   11          #include "DIDI_bmp.c"
-  12          #include "..\lib\sll.h"
+  12          #include "C:\Users\IFMaker\Downloads\diditale-main\sll.h"
   13          
   14          extern int shieldUp, shieldDown, shieldLeft, shieldRight;
   15          bit rodando = 1;
@@ -28,7 +28,7 @@ line level    source
   19          int y1 = 0;
   20          char estado1,estado2,estado3;
   21          int stop = 0;
-  22          PLAN p0,p1,p2,p3;
+  22          PLAN p0,p1,p2,p3,p4;
   23          
   24          int shieldUp, shieldDown, shieldLeft, shieldRight;
   25          extern char estado;
@@ -36,336 +36,346 @@ line level    source
   27           
   28          
   29          void main(void){
-  30   1         printbmp(110,54,DIDI);
-  31   1         printbmp(100,44,ESCUDOHORIZONTAL);
-  32   1      
-  33   1         p0.backgroudplan = BACKPLN1; 
-  34   1         p0.shapeplan = BACKPLN2;
-  35   1         p0.tcolor = RGB(0, 0, 0);
-  36   1         p0.ptr = &p1;
-  37   1       
-  38   1         p1.shapeplan = BACKPLN3;
-  39   1         p1.tcolor = RGB(0, 0, 0);
-  40   1         p1.ptr = &p2;
-  41   1      
-  42   1         p1.shapeplan = BACKPLN4;
-  43   1         p1.tcolor = RGB(0, 0, 0);
-  44   1         p1.ptr = null;
-  45   1      
-  46   1         GRPLNSEL = BACKPLN1;
-  47   1         printbmp(0,0,CENARIO);
-  48   1      
-  49   1         TMOD = 0x01;
-  50   1         TH0=(256-78);
-  51   1         IE = 0x82;
-  52   1         TR0 = 1;
-  53   1         estado = 0;
-  54   1         shieldUp = 1;
-  55   1         shieldDown = 0;
-C51 COMPILER V7.20   ESCALONAMENTO_TASK                                                    11/21/2024 10:29:49 PAGE 2   
+  30   1         p0.backgroudplan = BACKPLN1;
+  31   1          
+  32   1         p0.shapeplan = BACKPLN2;
+  33   1         p0.tcolor = RGB(0, 0, 0);
+  34   1         p0.ptr = &p1;
+  35   1       
+  36   1         p1.shapeplan = BACKPLN3;
+  37   1         p1.tcolor = RGB(0, 0, 0);
+  38   1         p1.ptr = &p2;
+  39   1      
+  40   1         p2.shapeplan = BACKPLN4;
+  41   1         p2.tcolor = RGB(0, 0, 0);
+  42   1         p2.ptr = &p3;
+  43   1      
+  44   1         p3.shapeplan = BACKPLN5;
+  45   1         p3.tcolor = RGB(0, 0, 0);
+  46   1         p3.ptr = &p4;
+  47   1      
+  48   1         p4.shapeplan = BACKPLN6;
+  49   1         p4.tcolor = RGB(0, 0, 0);
+  50   1         p4.ptr = null;
+  51   1      
+  52   1         GRPLNSEL = BACKPLN1;
+  53   1         printbmp(0,0,CENARIO);
+  54   1      
+  55   1         TMOD = 0x01;
+C51 COMPILER V7.20   ESCALONAMENTO_TASK                                                    11/21/2024 15:40:49 PAGE 2   
 
-  56   1         shieldLeft = 0;
-  57   1         shieldRight = 0;
-  58   1         while(1);
-  59   1      }
-  60          
-  61          int finish(){
-  62   1                printbmp(0,0,GAMEOVER);
-  63   1                stop = 1;
-  64   1                return stop;
+  56   1         TH0=(256-78);
+  57   1         IE = 0x82;
+  58   1         TR0 = 1;
+  59   1         estado = 0;
+  60   1         shieldUp = 1;
+  61   1         shieldDown = 0;
+  62   1         shieldLeft = 0;
+  63   1         shieldRight = 0;
+  64   1         while(1);
   65   1      }
   66          
-  67          void task0(void){
-  68   1        GRPLNSEL = BACKPLN2;
-  69   1        PaintPlan(RGB(0,0,0));
-  70   1      
-  71   1           if(stop == 0){
-  72   2      
-  73   2             if(vkeydown(VK_RIGHT)){
-  74   3                     printbmp(110,54,DIDI);
-  75   3               printbmp(140,44,ESCUDOVERTICAL); //direita
-  76   3               printbmp(100,44,apagaHorizontal); //apaga cima
-  77   3               printbmp(100,84,apagaHorizontal); //apaga baixo
-  78   3               printbmp(100,44,apagaVertical); //apaga esquerda
-  79   3      
-  80   3                           shieldRight = 1;
-  81   3                     shieldUp = 0;
-  82   3                     shieldDown = 0;
-  83   3                     shieldLeft = 0;
-  84   3               delay(10);
-  85   3             }
-  86   2      
-  87   2             if(vkeydown(VK_LEFT)){
-  88   3                     printbmp(110,54,DIDI);
-  89   3               printbmp(100,44,ESCUDOVERTICAL);
-  90   3               printbmp(140,44,apagaVertical); 
-  91   3               printbmp(100,44,apagaHorizontal);
-  92   3               printbmp(100,84,apagaHorizontal);
-  93   3      
-  94   3                     shieldUp = 0;
-  95   3                     shieldDown = 0;
-  96   3                     shieldLeft = 1;
-  97   3                     shieldRight = 0; 
-  98   3               delay(10);
-  99   3              }
- 100   2      
- 101   2             if(vkeydown(VK_UP)){
- 102   3                     printbmp(110,54,DIDI);
- 103   3               printbmp(100,44,ESCUDOHORIZONTAL);
- 104   3               printbmp(140,44,apagaVertical);
- 105   3               printbmp(100,84,apagaHorizontal);   
- 106   3               printbmp(100,44,apagaVertical);
- 107   3      
- 108   3                     shieldUp = 1;
- 109   3                     shieldDown = 0;
- 110   3                     shieldLeft = 0;
- 111   3                     shieldRight = 0;
- 112   3               delay(10);    
- 113   3              }
- 114   2      
- 115   2             if(vkeydown(VK_DOWN)){
- 116   3                     printbmp(110,54,DIDI);
- 117   3               printbmp(100,84,ESCUDOHORIZONTAL);
-C51 COMPILER V7.20   ESCALONAMENTO_TASK                                                    11/21/2024 10:29:49 PAGE 3   
+  67          int finish(){
+  68   1              stop = 1;
+  69   1              return stop;
+  70   1      }
+  71          
+  72          
+  73          
+  74          void task0(void){
+  75   1        
+  76   1        GRPLNSEL = BACKPLN2;
+  77   1        //PaintPlan(RGB(0,0,0));
+  78   1           if(stop == 0){
+  79   2               printbmp(110,54,DIDI);
+  80   2             if(vkeydown(VK_RIGHT)){
+  81   3                   printbmp(110,54,DIDI);
+  82   3               printbmp(140,44,ESCUDOVERTICAL); //direita
+  83   3               printbmp(100,44,apagaHorizontal); //apaga cima
+  84   3               printbmp(100,84,apagaHorizontal); //apaga baixo
+  85   3               printbmp(100,44,apagaVertical); //apaga esquerda
+  86   3      
+  87   3                       shieldRight = 1;
+  88   3                   shieldUp = 0;
+  89   3                   shieldDown = 0;
+  90   3                   shieldLeft = 0;
+  91   3               delay(10);
+  92   3             }
+  93   2      
+  94   2             if(vkeydown(VK_LEFT)){
+  95   3                   printbmp(110,54,DIDI);
+  96   3               printbmp(100,44,ESCUDOVERTICAL);
+  97   3               printbmp(140,44,apagaVertical); 
+  98   3               printbmp(100,44,apagaHorizontal);
+  99   3               printbmp(100,84,apagaHorizontal);
+ 100   3      
+ 101   3                   shieldUp = 0;
+ 102   3                   shieldDown = 0;
+ 103   3                   shieldLeft = 1;
+ 104   3                   shieldRight = 0; 
+ 105   3               delay(10);
+ 106   3              }
+ 107   2      
+ 108   2             if(vkeydown(VK_UP)){
+ 109   3                   printbmp(110,54,DIDI);
+ 110   3               printbmp(100,44,ESCUDOHORIZONTAL);
+ 111   3               printbmp(140,44,apagaVertical);
+ 112   3               printbmp(100,84,apagaHorizontal);   
+ 113   3               printbmp(100,44,apagaVertical);
+ 114   3      
+ 115   3                   shieldUp = 1;
+ 116   3                   shieldDown = 0;
+ 117   3                   shieldLeft = 0;
+C51 COMPILER V7.20   ESCALONAMENTO_TASK                                                    11/21/2024 15:40:49 PAGE 3   
 
- 118   3               printbmp(140,44,apagaVertical);
- 119   3               printbmp(100,44,apagaVertical);
- 120   3               printbmp(100,44,apagaHorizontal);
- 121   3      
- 122   3                     shieldUp = 0;
- 123   3                     shieldDown = 1;
- 124   3                     shieldLeft = 0;
- 125   3                     shieldRight = 0;
- 126   3               delay(10); 
- 127   3              }
- 128   2           delay(1);       
- 129   2             }
- 130   1             JoinPlans(&p0);
- 131   1           }
- 132          
- 133           void task1(void){
- 134   1      
- 135   1       GRPLNSEL = BACKPLN3;
- 136   1       PaintPlan(RGB(0,0,0));
- 137   1      
- 138   1      
- 139   1       if(stop == 0){
- 140   2          printbmp(x1,y1, SHURIKEN);
- 141   2      
- 142   2          switch(estado1){
- 143   3                                    
- 144   3                  case 3:
- 145   3                    x1--;
- 146   3                    y1--;
- 147   3                    if(x1<=0 || shieldRight == 1 && x1 == 146 && 44-31 <= y1 && y1 <= 84){
- 148   4                      estado1 = 2;
- 149   4                    }
- 150   3      
- 151   3                          else if (shieldRight == 0 && x1 == 132 && 44-31 <= y1 && y1 <= 84){
- 152   4                            finish();
- 153   4                          }  // direita OK
- 154   3                          
- 155   3                    if(y1 <=0 || shieldDown == 1 && y1 == 90 && x1 >= 100-31 && x1 <= 140){
- 156   4                      if(estado1 == 2){
- 157   5                                estado1 = 0;
- 158   5                            }
- 159   4                              else{
- 160   5                                estado1 = 1;
- 161   5                              }
- 162   4                    }
- 163   3               if(shieldDown == 0 && y1 == 90 && x1 >= 100-31 && x1 <= 140){
- 164   4                       finish();
- 165   4                           } // baixo OK
- 166   3                    break;
- 167   3                                    
- 168   3                    case 2:
- 169   3                      x1++;
- 170   3                      y1--;
- 171   3                            if(x1>=(240-21) || shieldLeft == 1 && x1 == 100-31 && 44-31 <= y1 && y1 <= 84){
- 172   4                              estado1 = 3;
- 173   4                            }
- 174   3                            else if (shieldLeft == 0 && x1 == 100-21 && 44-21 <= y1 && y1 <= 84){
- 175   4                              finish();
- 176   4                            }
- 177   3                            if(y1 <=0 || shieldDown == 1 && y1 == 88 && x1 >= 100-31 && x1 <= 140){
- 178   4                              if(estado1 ==3){
- 179   5                                      estado1 = 1;
-C51 COMPILER V7.20   ESCALONAMENTO_TASK                                                    11/21/2024 10:29:49 PAGE 4   
+ 118   3                   shieldRight = 0;
+ 119   3               delay(10);    
+ 120   3              }
+ 121   2      
+ 122   2             if(vkeydown(VK_DOWN)){
+ 123   3                   printbmp(110,54,DIDI);
+ 124   3               printbmp(100,84,ESCUDOHORIZONTAL);
+ 125   3               printbmp(140,44,apagaVertical);
+ 126   3               printbmp(100,44,apagaVertical);
+ 127   3               printbmp(100,44,apagaHorizontal);
+ 128   3      
+ 129   3                   shieldUp = 0;
+ 130   3                   shieldDown = 1;
+ 131   3                   shieldLeft = 0;
+ 132   3                   shieldRight = 0;
+ 133   3               delay(10); 
+ 134   3              }        
+ 135   2             }
+ 136   1           }
+ 137          
+ 138           void task1(void){
+ 139   1       GRPLNSEL = BACKPLN3;
+ 140   1       PaintPlan(RGB(0,0,0));
+ 141   1      
+ 142   1       if(stop == 0){
+ 143   2          printbmp(x1,y1, SHURIKEN);
+ 144   2      
+ 145   2          switch(estado1){
+ 146   3                              
+ 147   3                case 3:
+ 148   3                  x1--;
+ 149   3                  y1--;
+ 150   3                  if(x1<=0 || shieldRight == 1 && x1 == 146 && 44-31 <= y1 && y1 <= 84){
+ 151   4                    estado1 = 2;
+ 152   4                  }
+ 153   3      
+ 154   3                      else if (shieldRight == 0 && x1 == 132 && 44-31 <= y1 && y1 <= 84){
+ 155   4                        finish();
+ 156   4                      }  // direita OK
+ 157   3                      
+ 158   3                  if(y1 <=0 || shieldDown == 1 && y1 == 90 && x1 >= 90-31 && x1 <= 150){
+ 159   4                    if(estado1 == 2){
+ 160   5                            estado1 = 0;
+ 161   5                        }
+ 162   4                          else{
+ 163   5                            estado1 = 1;
+ 164   5                          }
+ 165   4                  }
+ 166   3               if(shieldDown == 0 && y1 == 90 && x1 >= 100-31 && x1 <= 140){
+ 167   4                     finish();
+ 168   4                       } // baixo OK
+ 169   3                  break;
+ 170   3                              
+ 171   3                  case 2:
+ 172   3                    x1++;
+ 173   3                    y1--;
+ 174   3                        if(x1>=(240-21) || shieldLeft == 1 && x1 == 100-31 && 44-31 <= y1 && y1 <= 84){
+ 175   4                          estado1 = 3;
+ 176   4                        }
+ 177   3                        else if (shieldLeft == 0 && x1 == 100-21 && 44-21 <= y1 && y1 <= 84){
+ 178   4                          finish();
+ 179   4                        }
+C51 COMPILER V7.20   ESCALONAMENTO_TASK                                                    11/21/2024 15:40:49 PAGE 4   
 
- 180   5                              }  
- 181   4                              else{
- 182   5                                estado1 = 0;
- 183   5                               }
- 184   4                            }
- 185   3                            else if(shieldDown == 0 && y1 == 82 && x1 >= 100-21 && x1 <= 140){
- 186   4                        finish();
- 187   4                    }  //baixo OK
- 188   3                    break;
- 189   3                                                        
- 190   3                    case 0:
- 191   3                              x1++;
- 192   3                              y1++;
- 193   3                                    if(x1>=(240-21) || shieldLeft == 1 && x1 == 100-31 && 44-31 <= y1 && y1 <= 84){
- 194   4                                      estado1 = 1;
- 195   4                                    }
- 196   3                            else if (shieldLeft == 0 && x1 == 100-21 && 44-31 <= y1 && y1 <= 84){
- 197   4                              finish();
- 198   4                            }
- 199   3                                    if(y1 > (128-21)|| shieldUp == 1 && y1 == 44-32 && 100-31 <= x1 && x1 <= 140){
- 200   4                                      if(estado1 == 1){
- 201   5                                                estado1 = 3;
- 202   5                                      }
- 203   4                                      else{
- 204   5                                        estado1 = 2;
- 205   5                                      }
- 206   4                                    }
- 207   3                   else if (shieldUp == 0 && y1 == 50-22 && 100-31 <= x1 && x1 <= 140){
- 208   4                                finish();
- 209   4                              } //cima OK
- 210   3                                    break;
- 211   3                                    
- 212   3                            case 1:
- 213   3                              x1--;
- 214   3                              y1++;
- 215   3                                    if(x1 <= 0 || shieldRight == 1 && x1 <= 140+31 && 44-31 <= y1 && y1 <= 84){
- 216   4                                      estado1 = 0;
- 217   4                                    }
- 218   3                              else if (shieldRight == 0 && x1 == 130 && 54 <= y1 && y1 <= 74){
- 219   4                                finish();
- 220   4                              }     // direita OK
- 221   3      
- 222   3                                    if(y1 >= 128-21 ||shieldUp == 1 && y1 == 44-32 && 100-31 <= x1 && x1 <= 140){
- 223   4                                      if(estado1 == 0){
- 224   5                                                estado1 = 2;
- 225   5                                              }
- 226   4                                      else{
- 227   5                                        estado1 = 3;
+ 180   3                        if(y1 <=0 || shieldDown == 1 && y1 == 88 && x1 >= 100-31 && x1 <= 140){
+ 181   4                          if(estado1 ==3){
+ 182   5                                estado1 = 1;
+ 183   5                          }  
+ 184   4                          else{
+ 185   5                            estado1 = 0;
+ 186   5                           }
+ 187   4                        }
+ 188   3                        else if(shieldDown == 0 && y1 == 82 && x1 >= 100-21 && x1 <= 140){
+ 189   4                      finish();
+ 190   4                  }  //baixo OK
+ 191   3                  break;
+ 192   3                                              
+ 193   3                  case 0:
+ 194   3                          x1++;
+ 195   3                          y1++;
+ 196   3                              if(x1>=(240-21) || shieldLeft == 1 && x1 == 100-31 && 44-31 <= y1 && y1 <= 84){
+ 197   4                                estado1 = 1;
+ 198   4                              }
+ 199   3                        else if (shieldLeft == 0 && x1 == 100-21 && 44-31 <= y1 && y1 <= 84){
+ 200   4                          finish();
+ 201   4                        }
+ 202   3                              if(y1 > (128-21)|| shieldUp == 1 && y1 == 44-32 && 100-31 <= x1 && x1 <= 140){
+ 203   4                                if(estado1 == 1){
+ 204   5                                        estado1 = 3;
+ 205   5                                }
+ 206   4                                else{
+ 207   5                                  estado1 = 2;
+ 208   5                                }
+ 209   4                              }
+ 210   3                   else if (shieldUp == 0 && y1 == 50-22 && 100-31 <= x1 && x1 <= 140){
+ 211   4                            finish();
+ 212   4                          } //cima OK
+ 213   3                              break;
+ 214   3                              
+ 215   3                        case 1:
+ 216   3                          x1--;
+ 217   3                          y1++;
+ 218   3                              if(x1 <= 0 || shieldRight == 1 && x1 <= 140 && 44-31 <= y1 && y1 <= 84){
+ 219   4                                estado1 = 0;
+ 220   4                              }
+ 221   3                          else if (shieldRight == 0 && x1 == 130 && 54 <= y1 && y1 <= 74){
+ 222   4                            finish();
+ 223   4                          }   // direita OK
+ 224   3      
+ 225   3                              if(y1 >= 128-21 ||shieldUp == 1 && y1 == 44-32 && 100-31 <= x1 && x1 <= 140){
+ 226   4                                if(estado1 == 0){
+ 227   5                                        estado1 = 2;
  228   5                                      }
- 229   4                                    }
- 230   3                                    else if (shieldUp == 0 && y1 == 50 && 110-31 <= x1 && x1 <= 125){
- 231   4                                finish();
- 232   4                              }  //Cima OK
- 233   3                                    
- 234   3          }
- 235   2        }
- 236   1        JoinPlans(&p0);
- 237   1      }
- 238          
- 239          void task2(void){
- 240   1      
- 241   1        GRPLNSEL = BACKPLN4;
-C51 COMPILER V7.20   ESCALONAMENTO_TASK                                                    11/21/2024 10:29:49 PAGE 5   
+ 229   4                                else{
+ 230   5                                  estado1 = 3;
+ 231   5                                }
+ 232   4                              }
+ 233   3                              else if (shieldUp == 0 && y1 == 50 && 110-31 <= x1 && x1 <= 125){
+ 234   4                            finish();
+ 235   4                          }  //Cima OK
+ 236   3                              
+ 237   3          }
+ 238   2        }
+ 239   1        JoinPlans(&p0);
+ 240   1      }
+ 241          
+C51 COMPILER V7.20   ESCALONAMENTO_TASK                                                    11/21/2024 15:40:49 PAGE 5   
 
- 242   1        PaintPlan(RGB(0,0,0));
+ 242          void task2(void){
  243   1      
- 244   1         if(stop == 0){
- 245   2          printbmp(x2,y2, SHURIKEN);
- 246   2          switch(estado2){
- 247   3                                    
- 248   3                  case 3:
- 249   3                    x2--;
- 250   3                    y2--;
- 251   3                    if(x2<=0 || shieldRight == 1 && x2 == 142 && 44-31 <= y2 && y2 <= 84){
- 252   4                      estado2 = 2;
- 253   4                    }
- 254   3      
- 255   3                          else if (shieldRight == 0 && x2 == 132 && 44-31 <= y2 && y2 <= 84){
- 256   4                            finish();
- 257   4                          }  // direita OK
- 258   3                          
- 259   3                    if(y2 <=0 || shieldDown == 1 && y2 == 85 && x2 >= 100-31 && x2 <= 140){
- 260   4                      if(estado2 == 2){
- 261   5                                estado2 = 0;
- 262   5                            }
- 263   4                              else{
- 264   5                                estado2 = 1;
- 265   5                              }
- 266   4                    }
- 267   3               if(shieldDown == 0 && y2 == 82 && x2 >= 100-31 && x2 <= 140){
- 268   4                       finish();
- 269   4                           } // baixo OK
- 270   3                    break;
- 271   3                                    
- 272   3                    case 2:
- 273   3                      x2++;
- 274   3                      y2--;
- 275   3                            if(x2>=(240-21) || shieldLeft == 1 && x2 == 100-31 && 44-31 <= y2 && y2 <= 84){
- 276   4                              estado2 = 3;
- 277   4                            }
- 278   3                            else if (shieldLeft == 0 && x2 == 100-21 && 44-21 <= y2 && y2 <= 84){
- 279   4                              finish();
- 280   4                            }
- 281   3                            if(y2 <=0 || shieldDown == 1 && y2 == 85 && x2 >= 100-31 && x2 <= 140){
- 282   4                              if(estado2 ==3){
- 283   5                                      estado2 = 1;
- 284   5                              }  
- 285   4                              else{
- 286   5                                estado2 = 0;
- 287   5                               }
- 288   4                            }
- 289   3                            else if(shieldDown == 0 && y2 == 82 && x2 >= 100-21 && x2 <= 140){
- 290   4                        finish();
- 291   4                    }  //baixo OK
- 292   3                    break;
- 293   3                                                        
- 294   3                    case 0:
- 295   3                              x2++;
- 296   3                              y2++;
- 297   3                                    if(x2>=(240-21) || shieldLeft == 1 && x2 == 100-31 && 44-31 <= y2 && y2 <= 84){
- 298   4                                      estado2 = 1;
- 299   4                                    }
- 300   3                            else if (shieldLeft == 0 && x2 == 100-21 && 44-31 <= y2 && y2 <= 84){
- 301   4                              finish();
- 302   4                            }
- 303   3                                    if(y2 > (128-21)|| shieldUp == 1 && y2 == 44-32 && 100-31 <= x2 && x2 <= 140){
-C51 COMPILER V7.20   ESCALONAMENTO_TASK                                                    11/21/2024 10:29:49 PAGE 6   
+ 244   1        GRPLNSEL = BACKPLN4;
+ 245   1        PaintPlan(RGB(0,0,0));
+ 246   1      
+ 247   1         if(stop == 0){
+ 248   2          printbmp(x2,y2, SHURIKEN);
+ 249   2          switch(estado2){
+ 250   3                              
+ 251   3                case 3:
+ 252   3                  x2--;
+ 253   3                  y2--;
+ 254   3                  if(x2<=0 || shieldRight == 1 && x2 == 142 && 44-31 <= y2 && y2 <= 84){
+ 255   4                    estado2 = 2;
+ 256   4                  }
+ 257   3      
+ 258   3                      else if (shieldRight == 0 && x2 == 132 && 44-31 <= y2 && y2 <= 84){
+ 259   4                        finish();
+ 260   4                      }  // direita OK
+ 261   3                      
+ 262   3                  if(y2 <=0 || shieldDown == 1 && y2 == 85 && x2 >= 90-31 && x2 <= 150){
+ 263   4                    if(estado2 == 2){
+ 264   5                            estado2 = 0;
+ 265   5                        }
+ 266   4                          else{
+ 267   5                            estado2 = 1;
+ 268   5                          }
+ 269   4                  }
+ 270   3               if(shieldDown == 0 && y2 == 82 && x2 >= 100-31 && x2 <= 140){
+ 271   4                     finish();
+ 272   4                       } // baixo OK
+ 273   3                  break;
+ 274   3                              
+ 275   3                  case 2:
+ 276   3                    x2++;
+ 277   3                    y2--;
+ 278   3                        if(x2>=(240-21) || shieldLeft == 1 && x2 == 100-31 && 44-31 <= y2 && y2 <= 84){
+ 279   4                          estado2 = 3;
+ 280   4                        }
+ 281   3                        else if (shieldLeft == 0 && x2 == 100-21 && 44-21 <= y2 && y2 <= 84){
+ 282   4                          finish();
+ 283   4                        }
+ 284   3                        if(y2 <=0 || shieldDown == 1 && y2 == 85 && x2 >= 100-31 && x2 <= 140){
+ 285   4                          if(estado2 ==3){
+ 286   5                                estado2 = 1;
+ 287   5                          }  
+ 288   4                          else{
+ 289   5                            estado2 = 0;
+ 290   5                           }
+ 291   4                        }
+ 292   3                        else if(shieldDown == 0 && y2 == 82 && x2 >= 100-21 && x2 <= 140){
+ 293   4                      finish();
+ 294   4                  }  //baixo OK
+ 295   3                  break;
+ 296   3                                              
+ 297   3                  case 0:
+ 298   3                          x2++;
+ 299   3                          y2++;
+ 300   3                              if(x2>=(240-21) || shieldLeft == 1 && x2 == 100-31 && 44-31 <= y2 && y2 <= 84){
+ 301   4                                estado2 = 1;
+ 302   4                              }
+ 303   3                        else if (shieldLeft == 0 && x2 == 100-21 && 44-31 <= y2 && y2 <= 84){
+C51 COMPILER V7.20   ESCALONAMENTO_TASK                                                    11/21/2024 15:40:49 PAGE 6   
 
- 304   4                                      if(estado2 == 1){
- 305   5                                                estado2 = 3;
- 306   5                                      }
- 307   4                                      else{
- 308   5                                        estado2 = 2;
- 309   5                                      }
- 310   4                                    }
- 311   3                   else if (shieldUp == 0 && y2 == 50-22 && 100-31 <= x2 && x2 <= 140){
- 312   4                                finish();
- 313   4                              } //cima OK
- 314   3                                    break;
- 315   3                                    
- 316   3                            case 1:
- 317   3                              x2--;
- 318   3                              y2++;
- 319   3                                    if(x2 <= 0 || shieldRight == 1 && x2 == 132 && 44-31 <= y2 && y2 <= 84){
- 320   4                                      estado2 = 0;
- 321   4                                    }
- 322   3                              else if (shieldRight == 0 && x2 == 130 && 44-31 <= y2 && y2 <= 84){
- 323   4                                finish();
- 324   4                              }     // direita OK
- 325   3      
- 326   3                                    if(y2 >= 128-21 || shieldUp == 1 && y2 == 44-32 && 100-31 <= x2 && x2 <= 140){
- 327   4                                      if(estado2 == 0){
- 328   5                                                estado2 = 2;
- 329   5                                              }
- 330   4                                      else{
- 331   5                                        estado2 = 3;
+ 304   4                          finish();
+ 305   4                        }
+ 306   3                              if(y2 > (128-21)|| shieldUp == 1 && y2 == 44-32 && 100-31 <= x2 && x2 <= 140){
+ 307   4                                if(estado2 == 1){
+ 308   5                                        estado2 = 3;
+ 309   5                                }
+ 310   4                                else{
+ 311   5                                  estado2 = 2;
+ 312   5                                }
+ 313   4                              }
+ 314   3                   else if (shieldUp == 0 && y2 == 50-22 && 100-31 <= x2 && x2 <= 140){
+ 315   4                            finish();
+ 316   4                          } //cima OK
+ 317   3                              break;
+ 318   3                              
+ 319   3                        case 1:
+ 320   3                          x2--;
+ 321   3                          y2++;
+ 322   3                              if(x2 <= 0 || shieldRight == 1 && x1 <= 140 && 44-31 <= y1 && y1 <= 84){
+ 323   4                                estado2 = 0;
+ 324   4                              }
+ 325   3                          else if (shieldRight == 0 && x2 == 130 && 44-31 <= y2 && y2 <= 84){
+ 326   4                            finish();
+ 327   4                          }   // direita OK
+ 328   3      
+ 329   3                              if(y2 >= 128-21 || shieldUp == 1 && y2 == 44-32 && 100-31 <= x2 && x2 <= 140){
+ 330   4                                if(estado2 == 0){
+ 331   5                                        estado2 = 2;
  332   5                                      }
- 333   4                                    }
- 334   3                                    else if (shieldUp == 0 && y2 == 50-22 && 100-31 <= x2 && x2 <= 140){
- 335   4                                finish();
- 336   4                              }  //Cima OK
- 337   3                                    
- 338   3          }
- 339   2        }
- 340   1      }
- 341          
+ 333   4                                else{
+ 334   5                                  estado2 = 3;
+ 335   5                                }
+ 336   4                              }
+ 337   3                              else if (shieldUp == 0 && y2 == 50-22 && 100-31 <= x2 && x2 <= 140){
+ 338   4                            finish();
+ 339   4                          }  //Cima OK
+ 340   3                              
+ 341   3          }
+ 342   2        }
+ 343   1      }
+ 344          
+ 345          void gameover(void){
+ 346   1        if(stop == 1){
+ 347   2          GRPLNSEL = BACKPLN2;
+ 348   2              PaintPlan(RGB(0,0,0));
+ 349   2              printbmp(0,0,DEAD);
+ 350   2        }
+ 351   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   2664    ----
+   CODE SIZE        =   2689    ----
    CONSTANT SIZE    =  16098    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =     61    ----
+   DATA SIZE        =     71    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =      1    ----
 END OF MODULE INFORMATION.

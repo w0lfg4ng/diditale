@@ -1,11 +1,14 @@
-// SLL.H 0.79s        dont worry be happy
+// SLL.H 0.79x        dont worry be happy
 //
 //   System Link Layer (Header)
 //
 //==============================================================================
 // pointer_type [pointer_to] * [pointer_in] pointer_name [= address];
-
+//
 //http://www.smartrtos.com/wordpress/
+#ifndef __SLL_H__
+#define __SLL_H__
+
 #ifndef __KEIL__
 #warning "Este código provavelmente não vai funcionar sem o compilador KEIL."
 #endif
@@ -27,7 +30,6 @@ typedef WORD HANDLE;
 #define MENOR(a,b) ((a)<(b)?(a):(b))  // Esta macro retorna o menor valor entre a e b
 #define MAIOR(a,b) ((a)>(b)?(a):(b))  // Esta macro retorna o maior valor entre a e b
 #define PARE while(1)
-//#define STOP while(1)
  
 typedef struct _SYSTEMTIME {        // Estrutura para pegar a hora do windows
     WORD wYear;
@@ -43,15 +45,23 @@ typedef struct _SYSTEMTIME {        // Estrutura para pegar a hora do windows
 typedef struct _surface {
     char maskplane;
     char shapeplane;
-    char backgroundplane;
+    char backgroudplane;
     struct _surface * ptr;      //3 bytes
 } SURFACE, *PSURFACE;
+
+typedef struct _plan {
+    DWORD tcolor;            //4
+    char dummy;              
+    char shapeplan;
+    char backgroudplan;
+    struct _plan * ptr;      //3 bytes
+} PLAN, *PPLAN;
 
 typedef struct _VgaPalette {       // Estrura usada para armazenar componentes de cor
 	BYTE    red;             //Verde
 	BYTE    grn;             //Vermelho 
 	BYTE    blu;             //Azul
-}VGA_PALETTE; 
+} VGA_PALETTE; 
 
 typedef struct TAGcolor {         // Estrura para definir uma cor em algumas função gráficas
   BYTE red;
@@ -216,6 +226,13 @@ typedef struct mmtime_tag {
         } midi; 
     } u; 
 } MMTIME,*PMMTIME;
+
+//http://www.fileformat.info/mirror/egff/ch02_02.htm
+
+//extern char code _VgaTable[];
+extern VGA_PALETTE code _VgaTable[];
+
+
 /* types for wType field in MMTIME struct */
 #define TIME_MS         0x0001  /* time in milliseconds */
 #define TIME_SAMPLES    0x0002  /* number of wave samples */
@@ -230,7 +247,8 @@ typedef struct mmtime_tag {
 #define GetGValue(rgb)      ((BYTE)(((WORD)(rgb)) >> 8)) //Pega o valor da componente verde de um RGB
 #define GetRValue(rgb)      ((BYTE)((rgb)>>16))          //Pega o valor da componente vermelha de um RGB
 #define RGB(r,g,b)          (((BYTE)(b)|((WORD)((BYTE)(g))<<8))|(((DWORD)(BYTE)(r))<<16)) //Calcula um RGB a partir das componentes de cor
-sbit BUTTON_OK = 0xB0^0;          // bir do Botão P3.0 OK na interface do VM
+sbit BUTTON_OK = 0xB0^7;          // bir do Botão P3.7 OK na interface do VM
+sbit BOK = 0xB0^7;
 //	   0 1 2 3  posição alinhado a byte
 // PC DWORD |B|G|R|N|    litter endian
 
@@ -308,9 +326,10 @@ sbit BUTTON_OK = 0xB0^0;          // bir do Botão P3.0 OK na interface do VM
 #define VK_CODE29      (*(BYTE xdata *)0xfe35)     // Código da tecla virtual
 #define VK_CODE30      (*(BYTE xdata *)0xfe36)     // Código da tecla virtual
 #define VK_CODE31      (*(BYTE xdata *)0xfe37)     // Código da tecla virtual
-
-#define DELAYEND      (*(BYTE xdata *)0xfee0) 
-#define CONTMILLIS    (*(DWORD xdata *)0xfee4) 
+#define TCOLOR         (*(DWORD xdata *)0xfe38)    // código da cor transparente
+#define STSSTDOUT      (*(BYTE xdata *)0xfedc)	 // Se 0 saida caracter na tela, se 1 terminal
+#define DELAYEND       (*(BYTE xdata *)0xfee0) 
+#define CONTMILLIS     (*(DWORD xdata *)0xfee4) 
 
 #define GRPIXMODE0    (*(BYTE xdata *)0xfef0)    // Seleciona como o pixel vai ser atualizado, O=sem operação, 1=OR com antigo , 2=AND
 #define GRPIXMODE1    (*(BYTE xdata *)0xfef1)    // Seleciona como o pixel vai ser atualizado, O=sem operação, 1=OR com antigo , 2=AND
@@ -342,7 +361,7 @@ sbit BUTTON_OK = 0xB0^0;          // bir do Botão P3.0 OK na interface do VM
 #define WRGRCOM       (*(BYTE xdata *)0xff94)    //Comando de escrita no grafico
 #define RDGRCOM       (*(BYTE xdata *)0xff98)    //Leitura do grafico
 #define WRTXCOM       (*(BYTE xdata *)0xff9c)    //Comando de escrita no texto Joga caracter ascii com incremento do ADP  08 backspace  0A line feed 0D carriage return
-#define WRTTYCOM      (*(BYTE xdata *)0xff9e)    //COmando de escrita no terminal 
+#define WRTTYCOM      (*(BYTE xdata *)0xff9e)    //Comando de escrita no terminal 
 #define RDTXCOM       (*(BYTE xdata *)0xffa0)    //Leitura no texto
 #define RDTTYCOM      (*(BYTE xdata *)0xffa2)    //Leitura no Terminal
 #define RDTXICOM      (*(BYTE xdata *)0xffa4)    //Leitura no texto com incremento do ADP
@@ -350,8 +369,6 @@ sbit BUTTON_OK = 0xB0^0;          // bir do Botão P3.0 OK na interface do VM
 #define WRGRPFIXCOM   (*(BYTE xdata *)0xffac)    //Escrita na memoria gráfica usando paleta fixa
 #define GRDATARD      (*(DWORD xdata *)0xffb0)   // {N,R,G,B}; lido da memoria gráfica pelo comando RDGRICOM ou RDGRCOM
 #define GRTXMODE      (*(BYTE xdata *)0xffb4)    // Seleciona XOR=0 OR=1 AND=2
-//#define GRPIXMODE0    (*(BYTE xdata *)0xffb5)    // Seleciona como o pixel vai ser atualizado, O=sem operação, 1=OR com antigo , 2=AND
-//#define GRPIXMODE1    (*(BYTE xdata *)0xffb6)    // Seleciona como o pixel vai ser atualizado, O=sem operação, 1=OR com antigo , 2=AND
 #define GRPLNSEL      (*(BYTE xdata *)0xffb7)    // Seleciona o plano grafico atual (FRONTPLN ou BACKPLNs)
 #define VPLAFORMH     (*(BYTE xdata *)0xffb8)    //Versão da plataforma   ex: 0xffB8 = 0 0xffB9=98  => 0.98
 #define VPLAFORML     (*(BYTE xdata *)0xffb9)    //Versão da plataforma   ex: 0xffB8 = 0 0xffB9=98  => 0.98
@@ -374,9 +391,7 @@ sbit BUTTON_OK = 0xB0^0;          // bir do Botão P3.0 OK na interface do VM
 #define BUFTMSOUNDPTRADDR 0xffd4                     // Ponteiro do buffer temporário (3 bytes) (ponteiro genérico) R3:R2:R1
 #define BUFTMPLEN     (*(WORD xdata *)0xffd8)    // Comprimento com em bytes do buffer temporário (WORD) 2 bytes
 #define BUFTMPSOUNDLEN BUFTMPLEN 
-//#define SOUNDLOAD     (*(char xdata *)0xffda)  // Comando de carga dos bytes do buffer temporário para o buffer de som
 #define SOUNDCOMM     (*(char xdata *)0xffdb)    // Toca som do buffer (quando é escrito) 0 = Play, 1=Stop, 2 = Pause, 3= Restart, 4 = Close, 5 = Position
-//#define BUFSRESET     (*(char xdata *)0xffdc)  // Reseta buffer   (quando é escrito)
 #define BITPERSAM     (*(char xdata *)0xffdd)    // formato dos dados do som (8/16) bits      *
 #define NUMCHANNELS   (*(char xdata *)0xffde)    // Número de canais 1 = Mono 2 =Stereo  (char)     *
 #define SNDSTATUS     (*(char xdata *)0xffdf)    // status dõs comandos e player
@@ -396,9 +411,14 @@ sbit BUTTON_OK = 0xB0^0;          // bir do Botão P3.0 OK na interface do VM
 #define VALSECOND     (*(BYTE xdata *) 0xfffb)   //Segundo
 #define VALMILLISECONDS (*(WORD xdata *) 0xfffc) //milisegundos
 #define CLOCKCOMM     (*(char xdata *) 0xfffe)   //Comandos do relógio  READ e WRITE
-#define CPUCOMM	  (*(char xdata *) 0xffff)   //Comandos para a cpu
-#define VGATABLE      VgaTable //((char code *) 0xfb00)      //Ponteiro da paleta de cores VGA padrão 
- 
+#define CPUCOMM	  (*(char xdata *) 0xffff)       //Comandos para a cpu
+#define VGATABLE      (_VgaTable)                //Ponteiro da paleta de cores VGA padrão 
+
+//#define SOUNDLOAD     (*(char xdata *)0xffda)  // Comando de carga dos bytes do buffer temporário para o buffer de som
+//#define BUFSRESET     (*(char xdata *)0xffdc)  // Reseta buffer   (quando é escrito)
+//#define GRPIXMODE0    (*(BYTE xdata *)0xffb5)    // Seleciona como o pixel vai ser atualizado, O=sem operação, 1=OR com antigo , 2=AND
+//#define GRPIXMODE1    (*(BYTE xdata *)0xffb6)    // Seleciona como o pixel vai ser atualizado, O=sem operação, 1=OR com antigo , 2=AND
+
 enum {PLAY,STOP,PAUSE,RESTART,CLOSE,POSITION,STATUS,PLAYTONE,RESETBUF,LOADBUF}; // Comandos do SOUNDCOMM
 enum {SNDERROR=255,SNDSUCCESS = 0,SNDBFULL,PLAYING,STOPED,PAUSED};  // estatus do som
 enum {FCREATE=1,FOPENRO,FOPEN,FCLOSE,FSEEK_CUR,FSEEK_END,FSEEK_SET,FREAD,FWRITE};
@@ -409,7 +429,7 @@ enum {FRONTPLN,BACKPLN,BACKPLN1=1,BACKPLN2,BACKPLN3,BACKPLN4,
       BACKPLN11,BACKPLN12,BACKPLN13,BACKPLN14,BACKPLN15};
 // Códigos de erro das operações de I/O
 //      Constant  Value	System Error Message	Value
-#define E2BIG	  7    //Argument list too long	7
+#define E2BIG	  7      //Argument list too long	7
 #define EACCES	  13   //Permission denied	13
 #define EAGAIN	  11   //No more processes or not enough memory or maximum nesting level reached	11
 #define EBADF	  9    //Bad file number	9
@@ -459,6 +479,7 @@ extern void          drawrecta(unsigned char x,unsigned char y,PRECTA);
 extern void          version(char *,int len);                                                 //Pega a versão do SLL ponterio para string com a versão 5 bytes são necessários
 extern WORD          xendian16(WORD);                                                 //permuta de big endiam para litter endiam 16 bits
 extern DWORD         xendian32(DWORD);                                                //permuta de big endiam para litter endiam 32 bits
+extern float         xendianf(float);                                                //permuta de big endiam para litter endiam 32 bits
 extern void          CopyBackPlane(void);                                             //Copia todo conteúdo do plano de fundo (PLNCPYSEL) para o plano frontal
 extern void          CopyBackPlaneEx(char plane);                                     //Copia todo conteúdo de um plano de fundo para o plano frontal
 extern void          CopyInterPlane(char dest,char src);                              //Copia o conteudo de um plano em outro
@@ -477,6 +498,7 @@ extern WAVDATA *     SearchData(const char *s);                                 
 extern void          VMOff(void);                                                     //Fecha o VM
 extern void          VMReinit(void);                                                  //Reinicializa VM
 extern void          PaintPlane (char plane,char cor);                                //Pinta plano de preto até branco passando por 256 níveis
+extern void          PaintPlan (DWORD);                                //Pinta plano o plano selecionado
 extern void          strtoscr(char *);              //Imprime uma strig
 extern void          GetSystemTime( SYSTEMTIME *);
 extern void          fflush(void);
@@ -501,16 +523,27 @@ extern void          PauseSound(char handle);
 extern void          StopSound(char handle);
 extern void          ContinueSound(char handle);
 extern char          CloseSound(char handle);
+extern void          JoinPlans(PPLAN);
 
-extern void          delay(DWORD n);
-extern DWORD         millis(void);
-extern void          delayBreak(void);
+extern void          delay(DWORD n);                      //N tem
+extern DWORD         millis(void);                        //70
+extern void          delayBreak(void);                    //71
+
+extern void          setstdout(char);                     //N tem | opções (SCREEN/TERMINAL) defaul SCREEN
+extern void          setbaudrate(DWORD clk, WORD * taxa); //73
+extern bit           writecomm(BYTE c);                   //74
+extern bit           readcomm(BYTE * c);                  //75
+
+extern void          printTTY(char c);                    //66
+extern void          printsTTY(char* p);                  //67
+extern bit           getcharTTY(char* c);                 //68
 
 enum {UPMOVE,DOWNMOVE, LEFTMOVE,RIGHTMOVE};
 enum {SHIFT,ROTATE};
 enum {PALNLOAD,PALLOAD};
 enum {BGBLACK,BGWHITE=255};
 enum {ONCE,LOOPING};
+enum {SCREEN,TERMINAL,COMSERIAL,RESERV};
 // Extrutura de cabeçalho de arquivo bitmap
 
 struct PALSBITMAP {
@@ -577,9 +610,6 @@ struct SSMALLBMP32 {  //big endian
 
 extern  char xdata _temp_buf_sprintf[100];
 
-//http://www.fileformat.info/mirror/egff/ch02_02.ht
-
-extern VGA_PALETTE code VgaTable[256];
 
 /*
  * Virtual Keys, Standard Set
@@ -686,3 +716,5 @@ extern VGA_PALETTE code VgaTable[256];
 
 
 #endif
+#endif
+

@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  ESCALONAMENTO                                                        11/21/2024 10:29:49 PAGE     1
+A51 MACRO ASSEMBLER  ESCALONAMENTO                                                        11/21/2024 15:40:49 PAGE     1
 
 
 MACRO ASSEMBLER A51 V7.10
@@ -10,7 +10,7 @@ LOC  OBJ            LINE     SOURCE
                        1     ;UNDERTALE DA TURMINHA DO DIDI XD
                        2     ;escalonador
                        3     
-                       4     extrn code(task0,task1,task2)
+                       4     extrn code(gameover,task0,task1,task2)
                        5     public estado
                        6       
 ----                   7                 dseg at 8
@@ -20,42 +20,44 @@ LOC  OBJ            LINE     SOURCE
                       11     
 000B 758CB2           12                 mov  th0,#(256-78) 
 000E E508             13                 mov  a, estado
-0010 B4000B           14                 cjne a,#0, salto1
-0013 120000   F       15                 call task0
-0016 120000   F       16               call task1
-0019 120000   F       17                 call task2
-001C 8036             18                 jmp  fim
-                      19       
-001E B40105           20     salto1:  cjne a,#1,salto2
-0021 120000   F       21              call task1
-0024 802E             22              jmp  fim
-                      23                             
-0026 B40208           24     salto2:  cjne a,#2,salto3
-0029 120000   F       25              call task1
-002C 120000   F       26              call task2
-002F 8023             27              jmp  fim
-                      28     
-0031 B40308           29     salto3:  cjne a,#3,salto4
-0034 120000   F       30              call task0
-0037 120000   F       31              call task1              
-003A 8018             32              jmp  fim
-                      33     
-003C B40408           34     salto4:  cjne a,#4,salto5
-003F 120000   F       35              call task1
-0042 120000   F       36              call task2
-0045 800D             37              jmp  fim
-                      38     
-0047 B40508           39     salto5:  cjne a,#5,salto6
-004A 120000   F       40              call task1
-004D 750800           41              mov  estado,#0
-0050 8004             42              jmp  fim2
-                      43     
-0052 0508             44     salto6:  inc  estado
-0054 8000             45     fim:    jmp  fim2 
-0056 32               46     fim2:   reti
-                      47     
-                      48     end
-A51 MACRO ASSEMBLER  ESCALONAMENTO                                                        11/21/2024 10:29:49 PAGE     2
+0010 B4000E           14                 cjne a,#0, salto1
+0013 120000   F       15                             call gameover
+0016 120000   F       16                 call task0
+0019 120000   F       17                     call task1
+001C 120000   F       18                 call task2
+001F 8039             19                 jmp  fim
+                      20       
+0021 B40105           21     salto1:  cjne a,#1,salto2
+0024 120000   F       22              call task1
+0027 8031             23              jmp  fim
+                      24                             
+0029 B40208           25     salto2:  cjne a,#2,salto3
+002C 120000   F       26              call task1
+002F 120000   F       27              call task2
+0032 8026             28              jmp  fim
+                      29     
+0034 B40308           30     salto3:  cjne a,#3,salto4
+0037 120000   F       31              call task0
+003A 120000   F       32              call task1              
+003D 801B             33              jmp  fim
+                      34     
+003F B40408           35     salto4:  cjne a,#4,salto5
+0042 120000   F       36                      call task1
+0045 120000   F       37              call task2
+0048 8010             38              jmp  fim
+                      39     
+004A B4050B           40     salto5:  cjne a,#5,salto6
+004D 120000   F       41              call gameover
+0050 120000   F       42                      call task1
+0053 750800           43              mov  estado,#0
+0056 8004             44              jmp  fim2
+                      45     
+0058 0508             46     salto6:  inc  estado
+005A 8000             47     fim:    jmp  fim2 
+005C 32               48     fim2:   reti
+                      49     
+                      50     end
+A51 MACRO ASSEMBLER  ESCALONAMENTO                                                        11/21/2024 15:40:49 PAGE     2
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -64,14 +66,15 @@ SYMBOL TABLE LISTING
 N A M E             T Y P E  V A L U E   ATTRIBUTES
 
 ESTADO . . . . . .  D ADDR   0008H   A   
-FIM. . . . . . . .  C ADDR   0054H   A   
-FIM2 . . . . . . .  C ADDR   0056H   A   
-SALTO1 . . . . . .  C ADDR   001EH   A   
-SALTO2 . . . . . .  C ADDR   0026H   A   
-SALTO3 . . . . . .  C ADDR   0031H   A   
-SALTO4 . . . . . .  C ADDR   003CH   A   
-SALTO5 . . . . . .  C ADDR   0047H   A   
-SALTO6 . . . . . .  C ADDR   0052H   A   
+FIM. . . . . . . .  C ADDR   005AH   A   
+FIM2 . . . . . . .  C ADDR   005CH   A   
+GAMEOVER . . . . .  C ADDR   -----       EXT
+SALTO1 . . . . . .  C ADDR   0021H   A   
+SALTO2 . . . . . .  C ADDR   0029H   A   
+SALTO3 . . . . . .  C ADDR   0034H   A   
+SALTO4 . . . . . .  C ADDR   003FH   A   
+SALTO5 . . . . . .  C ADDR   004AH   A   
+SALTO6 . . . . . .  C ADDR   0058H   A   
 TASK0. . . . . . .  C ADDR   -----       EXT
 TASK1. . . . . . .  C ADDR   -----       EXT
 TASK2. . . . . . .  C ADDR   -----       EXT

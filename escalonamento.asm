@@ -1,7 +1,7 @@
 ;UNDERTALE DA TURMINHA DO DIDI XD
 ;escalonador
 
-extrn code(task0,task1,task2)
+extrn code(gameover,task0,task1,task2)
 public estado
   
             dseg at 8
@@ -12,8 +12,9 @@ estado: ds  1
             mov  th0,#(256-78) 
             mov  a, estado
             cjne a,#0, salto1
+			call gameover
             call task0
-	  call task1
+	        call task1
             call task2
             jmp  fim
   
@@ -32,12 +33,13 @@ salto3:  cjne a,#3,salto4
          jmp  fim
 
 salto4:  cjne a,#4,salto5
-         call task1
+		 call task1
          call task2
          jmp  fim
 
 salto5:  cjne a,#5,salto6
-         call task1
+         call gameover
+		 call task1
          mov  estado,#0
          jmp  fim2
 
